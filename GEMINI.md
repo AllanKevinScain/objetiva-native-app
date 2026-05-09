@@ -44,3 +44,16 @@ Componente padrão para telas com scroll.
 - **Espaçamento:** Utilize as constantes em `src/constants/spacing.ts`.
 - **Layout de Cards:** Para listas de itens, prefira o padrão de cards com a cor `surface`, bordas arredondadas (12-16px) e sombras leves.
 - **SafeArea:** Evite o uso de `SafeAreaView` global se estiver usando um Header customizado que já gerencia o topo da tela.
+
+## Gerenciamento de Estado e Performance
+
+### Estabilidade de Referências
+Ao criar Providers, sempre utilize `useMemo` para o valor do contexto e `useCallback` para as funções. Isso evita renderizações desnecessárias e loops infinitos em componentes que utilizam `useEffect` com essas funções como dependência.
+
+### Atualização de Listas (FlatList)
+Para garantir que o `FlatList` reflita mudanças em objetos complexos ou arrays gerenciados por formulários (React Hook Form):
+- Utilize `watch()` ou `useWatch()` para obter os dados em tempo real.
+- Utilize a prop `extraData` passando o próprio array de dados para forçar a re-renderização quando houver mudanças internas nos itens.
+
+### Persistência de Dados
+O carregamento inicial de dados (ex: via AsyncStorage) deve ser feito em um `useEffect` com dependências estáveis. Evite incluir objetos de métodos (como os retornados por `useFieldArray`) diretamente nas dependências se eles não forem estáveis.
