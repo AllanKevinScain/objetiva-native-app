@@ -31,7 +31,6 @@ const config = defineConfig([
           fixStyle: "separate-type-imports",
         },
       ],
-      "react-refresh/only-export-components": "off",
     },
   },
 ]);

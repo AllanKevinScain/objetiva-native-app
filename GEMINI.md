@@ -50,6 +50,12 @@ Componente padrão para telas com scroll.
 
 Ao realizar a exclusão ou edição de um item que possua parâmetros dinâmicos (como `id`), prefira utilizar `router.replace` ao retornar para a lista principal ou tela anterior. Isso garante que a rota antiga seja removida da pilha de navegação, limpando os parâmetros do contexto global e evitando que o usuário retorne a um recurso inexistente via botão "voltar".
 
+### Estrutura de Pastas e Componentes
+- **src/app/**: Contém estritamente arquivos de rota (páginas). Cada arquivo deve ter um `export default`.
+- **src/components/**: Pasta central para componentes reutilizáveis.
+  - **src/components/panel-components/**: Componentes específicos da funcionalidade de painéis (ex: `Panels`, `BottomBar`).
+- **Importante**: Nunca mantenha pastas de componentes dentro de `src/app` (mesmo com o prefixo `_`), para evitar que o Expo Router emita avisos de "missing default export" no terminal e para manter uma separação clara entre lógica de navegação e componentes visuais.
+
 ## Estilização e Layout
 
 - **Espaçamento:** Utilize as constantes em `src/constants/spacing.ts`.

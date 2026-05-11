@@ -1,11 +1,10 @@
 import { AnimatedView } from "@/components/animated-view";
+import { BottomBar, Panels } from "@/components/panel-components";
 import { TextApp } from "@/components/text-app";
 import { TouchableOpacityApp } from "@/components/touchableopacity-app";
 import { theme } from "@/constants/theme";
 import { Entypo } from "@expo/vector-icons";
 import { FlatList, View } from "react-native";
-import { BottomBar } from "./components/bottom-bar";
-import { Panels } from "./components/panels";
 
 export default function PanelIndex() {
   return (
