@@ -1,12 +1,15 @@
-import { AnimatedScrollView, TextApp, TouchableOpacityApp } from "@/components";
+import { AnimatedView } from "@/components/animated-view";
+import { TextApp } from "@/components/text-app";
+import { TouchableOpacityApp } from "@/components/touchableopacity-app";
 import { theme } from "@/constants/theme";
 import { Entypo } from "@expo/vector-icons";
 import { FlatList, View } from "react-native";
-import { BottomBar, Panels } from "./components";
+import { BottomBar } from "./components/bottom-bar";
+import { Panels } from "./components/panels";
 
 export default function PanelIndex() {
   return (
-    <AnimatedScrollView>
+    <AnimatedView>
       <View style={{ gap: 30 }}>
         <View>
           <TextApp type="subtitle" style={{ opacity: 0.7 }}>
@@ -41,6 +44,6 @@ export default function PanelIndex() {
       </View>
 
       <BottomBar />
-    </AnimatedScrollView>
+    </AnimatedView>
   );
 }

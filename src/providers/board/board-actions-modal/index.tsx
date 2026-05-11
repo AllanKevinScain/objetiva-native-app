@@ -1,8 +1,9 @@
-import { Dialog, TextApp } from "@/components";
+import { Dialog } from "@/components/dialog";
+import { TextApp } from "@/components/text-app";
 import { PANELS_TABLE_NAME } from "@/constants/async-tables";
 import { theme } from "@/constants/theme";
 import { usePanelAsyncStorage } from "@/hooks/use-panel-async-storage";
-import { usePanel } from "@/providers";
+import { usePanel } from "@/providers/panel";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Alert, TouchableOpacity } from "react-native";
 

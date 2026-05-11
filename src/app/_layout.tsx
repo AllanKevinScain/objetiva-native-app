@@ -1,8 +1,9 @@
-import { Header } from "@/components";
+import { Header } from "@/components/header";
 import { PANELS_TABLE_NAME } from "@/constants/async-tables";
 import { isEmpty } from "@/helpers";
 import { usePanelAsyncStorage } from "@/hooks/use-panel-async-storage";
-import { BoardProvider, PanelProvider } from "@/providers";
+import { BoardProvider } from "@/providers/board";
+import { PanelProvider } from "@/providers/panel";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";

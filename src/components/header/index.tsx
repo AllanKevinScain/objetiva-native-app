@@ -1,5 +1,5 @@
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { useBoard } from "@/providers";
+import { useBoard } from "@/providers/board";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import type { Href } from "expo-router";
 import { useRouter } from "expo-router";

@@ -1,4 +1,5 @@
-import { TextApp, TouchableOpacityApp } from "@/components";
+import { TextApp } from "@/components/text-app";
+import { TouchableOpacityApp } from "@/components/touchableopacity-app";
 import { theme } from "@/constants/theme";
 import type { PanelSchemaInfertype } from "@/schemas";
 import { View } from "react-native";

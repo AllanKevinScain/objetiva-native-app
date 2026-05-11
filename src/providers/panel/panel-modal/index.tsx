@@ -1,5 +1,7 @@
-import { Dialog, TextApp, TouchableOpacityApp } from "@/components";
+import { Dialog } from "@/components/dialog";
+import { TextApp } from "@/components/text-app";
 import { TextfieldRHF } from "@/components/text-field-rhf";
+import { TouchableOpacityApp } from "@/components/touchableopacity-app";
 import { theme } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import type { PanelSchemaInfertype } from "@/schemas";

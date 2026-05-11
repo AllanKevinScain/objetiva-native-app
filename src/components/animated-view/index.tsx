@@ -2,7 +2,7 @@ import { theme } from "@/constants/theme";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import Animated from "react-native-reanimated";
 
-export function AnimatedScrollView({ children }: { children: React.ReactNode }) {
+export function AnimatedView({ children }: { children: React.ReactNode }) {
   const backgroundColor = useThemeColor(
     {
       light: theme.color.light.background,

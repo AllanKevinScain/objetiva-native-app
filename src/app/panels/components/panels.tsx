@@ -1,13 +1,13 @@
 import { EmptyList } from "@/components/empty-list";
 import { PANELS_TABLE_NAME } from "@/constants/async-tables";
 import { useAsyncStorage } from "@/hooks/use-async-storage";
-import { usePanel } from "@/providers";
+import { usePanel } from "@/providers/panel";
 import type { PanelSchemaInfertype } from "@/schemas";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { useWatch } from "react-hook-form";
 import { FlatList } from "react-native";
-import { PanelItem } from "./";
+import { PanelItem } from "./panel-item";
 
 export function Panels() {
   const { panelsMethods, updateModalType, handlePanelModal, fieldArrayPanelsMethods } = usePanel();

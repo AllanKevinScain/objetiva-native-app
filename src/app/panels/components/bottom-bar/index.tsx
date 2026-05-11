@@ -1,5 +1,5 @@
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { usePanel } from "@/providers";
+import { usePanel } from "@/providers/panel";
 import { AntDesign, Entypo, FontAwesome } from "@expo/vector-icons";
 import { Dimensions, View } from "react-native";
 import { BottomBarItem } from "./bottom-bar-item";
