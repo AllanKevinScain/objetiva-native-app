@@ -1,0 +1,9 @@
+import { createContext } from "react";
+
+type BoardContextType = {
+  handleActionsModal: () => void;
+};
+
+export const BoardContext = createContext<BoardContextType>({
+  handleActionsModal: () => null,
+});

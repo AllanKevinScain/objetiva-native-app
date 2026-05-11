@@ -1,59 +1,26 @@
 import { PANELS_TABLE_NAME } from "@/constants/async-tables";
 import { usePanelAsyncStorage } from "@/hooks/use-panel-async-storage";
-import type { PanelSchemaInfertype, PanelsSchemaInfertype } from "@/schemas";
-import { panelSchema, panelsSchema } from "@/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
+import type { PanelSchemaInfertype } from "@/schemas";
 import * as Crypto from "expo-crypto";
-import { useCallback, useMemo, useState } from "react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { useCallback, useMemo } from "react";
+import { FormProvider } from "react-hook-form";
 import type { ProvidersProps } from "../providers.type";
 import { PanelContext } from "./context";
+import { useModalType } from "./hooks/use-modal-type";
+import { usePanelForm } from "./hooks/use-panel-form";
+import { usePanelModal } from "./hooks/use-panel-modal";
+import { usePanelsArray } from "./hooks/use-panels-array";
 import { PanelModal } from "./panel-modal";
 
 export type PanelModalType = "create" | "edit";
 
-export const defaultValues: PanelSchemaInfertype = {
-  title: "",
-  color: "#000",
-  id: undefined,
-};
-
 export function PanelProvider({ children }: ProvidersProps) {
   const { addPanel, editPanel } = usePanelAsyncStorage(PANELS_TABLE_NAME);
 
-  const [panelModalState, setPanelModal] = useState(false);
-  const [modalType, setModalType] = useState<PanelModalType>("create");
-
-  const panelsMethods = useForm<PanelsSchemaInfertype>({
-    resolver: zodResolver(panelsSchema),
-    defaultValues: { panels: [] },
-  });
-
-  const fieldArrayPanelsMethods = useFieldArray({
-    control: panelsMethods.control,
-    name: "panels",
-    keyName: "key",
-  });
-
-  const formPanelMethods = useForm<PanelSchemaInfertype>({
-    resolver: zodResolver(panelSchema),
-    defaultValues,
-  });
-
-  const handlePanelModal = useCallback(() => {
-    setPanelModal((s) => !s);
-  }, []);
-
-  const updateModalType = useCallback((type: PanelModalType) => {
-    setModalType(type);
-  }, []);
-
-  const resetFormPanelValues = useCallback(
-    (data?: PanelSchemaInfertype) => {
-      formPanelMethods.reset(data ? data : defaultValues);
-    },
-    [formPanelMethods]
-  );
+  const { panelModalState, handlePanelModal } = usePanelModal();
+  const { modalType, updateModalType } = useModalType();
+  const { defaultValues, formPanelMethods, resetFormPanelValues } = usePanelForm();
+  const { fieldArrayPanelsMethods, panelsMethods } = usePanelsArray();
 
   const handleSubmit = useCallback(
     async (value: PanelSchemaInfertype) => {
@@ -76,7 +43,7 @@ export function PanelProvider({ children }: ProvidersProps) {
         resetFormPanelValues();
       }
     },
-    [modalType, fieldArrayPanelsMethods, handlePanelModal, resetFormPanelValues, addPanel, editPanel]
+    [modalType, fieldArrayPanelsMethods, handlePanelModal, resetFormPanelValues, addPanel, editPanel],
   );
 
   const contextValue = useMemo(
@@ -86,8 +53,9 @@ export function PanelProvider({ children }: ProvidersProps) {
       handlePanelModal,
       updateModalType,
       resetFormPanelValues,
+      defaultValues,
     }),
-    [panelsMethods, fieldArrayPanelsMethods, handlePanelModal, updateModalType, resetFormPanelValues]
+    [panelsMethods, fieldArrayPanelsMethods, handlePanelModal, updateModalType, resetFormPanelValues, defaultValues],
   );
 
   return (

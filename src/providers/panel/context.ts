@@ -9,6 +9,7 @@ type PanelContextType = {
   handlePanelModal: () => void;
   updateModalType: (type: PanelModalType) => void;
   resetFormPanelValues(data?: PanelSchemaInfertype): void;
+  defaultValues: PanelSchemaInfertype;
 };
 
 export const PanelContext = createContext<PanelContextType>({
@@ -17,4 +18,5 @@ export const PanelContext = createContext<PanelContextType>({
   handlePanelModal: () => null,
   updateModalType: () => null,
   resetFormPanelValues: () => null,
+  defaultValues: {} as PanelSchemaInfertype,
 });

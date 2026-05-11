@@ -21,7 +21,9 @@ export function Panels() {
   useEffect(() => {
     async function load() {
       const items = (await getData(PANELS_TABLE_NAME)) as PanelSchemaInfertype[];
-      replace(items);
+
+      if (!items?.length) return replace([]);
+      else replace(items);
     }
     load();
   }, [getData, replace]);
@@ -37,7 +39,7 @@ export function Panels() {
           key={item.id}
           onPress={() =>
             push({
-              pathname: "/panels/[id]",
+              pathname: "/panels/(board)/[id]",
               params: { id: item.id! },
             })
           }
