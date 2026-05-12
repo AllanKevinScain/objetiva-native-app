@@ -16,6 +16,7 @@ export function TouchableOpacityApp(props: TouchableOpacityAppProps) {
   const surfaceSecondaryColor = useThemeColor({}, "surfaceSecondary");
   const transparentColor = useThemeColor({}, "transparent");
   const textOnPrimary = useThemeColor({}, "textOnPrimary");
+  const black = useThemeColor({}, "black");
 
   const getVariantStyles = () => {
     switch (variant) {
@@ -47,7 +48,7 @@ export function TouchableOpacityApp(props: TouchableOpacityAppProps) {
 
   return (
     <TouchableOpacity
-      style={[style.touchableOpacity, getVariantStyles(), disabledStyles, customStyle]}
+      style={[style.touchableOpacity, { shadowColor: black }, getVariantStyles(), disabledStyles, customStyle]}
       disabled={disabled || isLoading}
       activeOpacity={0.7}
       {...rest}>

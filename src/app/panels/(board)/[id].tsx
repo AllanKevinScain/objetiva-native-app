@@ -2,11 +2,11 @@ import { AnimatedView } from "@/components/animated-view";
 import { BottomBar, Tasks } from "@/components/board-components";
 import { TextApp } from "@/components/text-app";
 import { TextfieldRHF } from "@/components/text-field-rhf";
+import { theme } from "@/constants/theme";
 import { useBoard } from "@/providers/board";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useWatch } from "react-hook-form";
 import { View } from "react-native";
-import { style } from "./style";
 
 export default function BoardPanelIndex() {
   const { tasksMethods } = useBoard();
@@ -15,7 +15,7 @@ export default function BoardPanelIndex() {
 
   return (
     <AnimatedView>
-      <View style={style.inputBox}>
+      <View style={{ marginTop: theme.spacing.sizes.xs }}>
         <TextfieldRHF
           control={tasksMethods.control}
           name="search"

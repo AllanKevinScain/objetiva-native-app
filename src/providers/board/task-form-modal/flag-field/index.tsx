@@ -1,4 +1,4 @@
-import { Flag } from "@/components/board-components";
+import { Flag } from "@/components/flag";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import type { FlagSchemaInferType, TaskSchemaInfertype } from "@/schemas";
 import { useFormContext, useWatch } from "react-hook-form";

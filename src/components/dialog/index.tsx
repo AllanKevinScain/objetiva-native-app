@@ -13,13 +13,17 @@ interface DialogProps {
 export function Dialog(props: DialogProps) {
   const { visible, onRequestClose, children, heightContainerModal } = props;
   const black = useThemeColor({}, "black");
+  const white = useThemeColor({}, "white");
+  const transparent = useThemeColor({}, "transparent");
 
   const height = heightContainerModal ? heightContainerModal : Dimensions.get("window").height / 2;
 
   return (
     <Modal visible={visible} onRequestClose={onRequestClose} animationType="fade" transparent>
-      <Pressable style={style.container} onPress={onRequestClose}>
-        <Pressable style={[style.modalContent, { height }]} onPress={(e) => e.stopPropagation()}>
+      <Pressable style={[style.container, { backgroundColor: transparent }]} onPress={onRequestClose}>
+        <Pressable
+          style={[style.modalContent, { height, backgroundColor: white }]}
+          onPress={(e) => e.stopPropagation()}>
           <TouchableOpacity onPress={onRequestClose} style={{ position: "absolute", top: 4, right: 4, padding: 10 }}>
             <MaterialIcons name="close" size={30} color={black} />
           </TouchableOpacity>

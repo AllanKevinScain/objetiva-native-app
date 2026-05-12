@@ -1,4 +1,3 @@
-import { theme } from "@/constants/theme";
 import { Platform, StatusBar, StyleSheet } from "react-native";
 
 export const style = StyleSheet.create({
@@ -10,7 +9,6 @@ export const style = StyleSheet.create({
     // Android Shadow
     elevation: 8,
     // iOS Shadow
-    shadowColor: theme.color.dark.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,

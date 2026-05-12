@@ -3,17 +3,17 @@ import { TextApp } from "@/components/text-app";
 import { TextfieldRHF } from "@/components/text-field-rhf";
 import { TouchableOpacityApp } from "@/components/touchableopacity-app";
 import { theme } from "@/constants/theme";
+import type { ModalType } from "@/hooks/use-modal-type";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import type { PanelSchemaInfertype } from "@/schemas";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import type { Control, UseFormGetValues } from "react-hook-form";
 import { View } from "react-native";
-import type { PanelModalType } from "../provider";
 import { style } from "./style";
 
 interface PanelModalProps {
   visible: boolean;
-  modalType: PanelModalType;
+  modalType: ModalType;
   control: Control<PanelSchemaInfertype>;
   getValues: UseFormGetValues<PanelSchemaInfertype>;
   onSubmit: (_: PanelSchemaInfertype) => void;

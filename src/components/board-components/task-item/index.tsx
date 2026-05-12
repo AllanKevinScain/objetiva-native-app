@@ -1,3 +1,4 @@
+import { Flag } from "@/components/flag";
 import { Swipeable } from "@/components/swipeable";
 import { BOARD_TABLE_NAME } from "@/constants/async-tables";
 import { formatDateToBR } from "@/helpers";
@@ -7,7 +8,6 @@ import { useBoard } from "@/providers/board";
 import type { TaskSchemaInfertype } from "@/schemas";
 import { Alert, Text, View } from "react-native";
 import { Ball } from "../ball";
-import { Flag } from "../flag";
 import { style } from "./style";
 
 type TaskItemProps = TaskSchemaInfertype & {

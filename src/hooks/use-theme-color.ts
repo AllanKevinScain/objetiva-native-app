@@ -1,6 +1,5 @@
 import { theme } from "@/constants/theme";
 import type { ColorFieldsType } from "@/constants/theme/colors";
-import { useColorScheme } from "./use-color-scheme.web";
 
 type UseThemeColorProps = {
   light?: string;
@@ -8,7 +7,7 @@ type UseThemeColorProps = {
 };
 
 export function useThemeColor(props: UseThemeColorProps, colorName: keyof ColorFieldsType) {
-  const themeColor = useColorScheme() ?? "dark";
+  const themeColor = "dark";
   const colorFromProps = props[themeColor];
 
   if (colorFromProps) {

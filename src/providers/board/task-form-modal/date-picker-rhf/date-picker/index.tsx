@@ -26,6 +26,7 @@ export function Datepicker(props: DatepickerProps) {
   }, [mode, value]);
 
   const white = useThemeColor({}, "white");
+  const transparent = useThemeColor({}, "transparent");
 
   return (
     <>
@@ -33,7 +34,7 @@ export function Datepicker(props: DatepickerProps) {
         <Textfield {...restTextfieldProps} editable={false} value={memoValue} />
       </TouchableOpacity>
       <Modal transparent visible={show}>
-        <View style={style.overlay}>
+        <View style={[style.overlay, { backgroundColor: transparent }]}>
           <View
             style={[
               style.container,

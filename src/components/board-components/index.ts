@@ -1,6 +1,4 @@
-export * from "./ball";
-export * from "./bottom-bar";
-export * from "./flag";
-export * from "./task-item";
-export * from "./tasks";
+export { BottomBar } from "./bottom-bar";
+export { TaskItem } from "./task-item";
+export { Tasks } from "./tasks";
 

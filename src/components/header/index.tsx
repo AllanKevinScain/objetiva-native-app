@@ -25,6 +25,7 @@ export function Header(props: HeaderProps) {
 
   const primaryColor = useThemeColor({}, "primary");
   const textOnPrimary = useThemeColor({}, "textOnPrimary");
+  const black = useThemeColor({}, "black");
 
   function handleBack() {
     const href = back?.href as Href;
@@ -42,7 +43,7 @@ export function Header(props: HeaderProps) {
   }
 
   return (
-    <View style={[style.header, { backgroundColor: primaryColor }]}>
+    <View style={[style.header, { backgroundColor: primaryColor, shadowColor: black }]}>
       <View style={[style.topBar, { justifyContent: "space-between" }]}>
         <View style={style.topBar}>
           {!isPrincipalPage && (

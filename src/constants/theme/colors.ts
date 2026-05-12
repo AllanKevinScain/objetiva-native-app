@@ -41,7 +41,7 @@ export const color: ColorsType = {
 
     white: "#ffffff",
     black: "#000000",
-    transparent: "transparent",
+    transparent: "rgba(0,0,0,0.5)",
   },
   light: {
     primary: "#3b82f6",
@@ -63,6 +63,6 @@ export const color: ColorsType = {
 
     white: "#ffffff",
     black: "#000000",
-    transparent: "transparent",
+    transparent: "rgba(0,0,0,0.5)",
   },
 };

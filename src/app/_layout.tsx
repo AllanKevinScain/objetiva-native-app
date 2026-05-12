@@ -1,21 +1,32 @@
 import { Header } from "@/components/header";
 import { PANELS_TABLE_NAME } from "@/constants/async-tables";
+import { theme } from "@/constants/theme";
 import { isEmpty } from "@/helpers";
 import { usePanelAsyncStorage } from "@/hooks/use-panel-async-storage";
 import { BoardProvider } from "@/providers/board";
 import { PanelProvider } from "@/providers/panel";
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useColorScheme } from "react-native";
 import "react-native-reanimated";
+
+const CustomDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: theme.color.dark.background,
+    card: theme.color.dark.background,
+    text: theme.color.dark.textPrimary,
+    border: theme.color.dark.border,
+    primary: theme.color.dark.primary,
+  },
+};
 
 export default function RootLayout() {
   const { getPanel } = usePanelAsyncStorage(PANELS_TABLE_NAME);
-  const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={CustomDarkTheme}>
       <PanelProvider>
         <BoardProvider>
           <Stack
@@ -37,7 +48,7 @@ export default function RootLayout() {
             }}
           />
         </BoardProvider>
-        <StatusBar style="auto" />
+        <StatusBar style="dark" />
       </PanelProvider>
     </ThemeProvider>
   );
