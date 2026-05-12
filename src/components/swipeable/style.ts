@@ -20,13 +20,13 @@ export const style = StyleSheet.create({
     bottom: 0,
   },
   removeButton: {
-    width: "auto",
+    flex: 0,
     height: "100%",
     borderRadius: theme.spacing.borderRadius.sm,
     paddingHorizontal: theme.spacing.sizes.sm,
   },
   updatedButton: {
-    width: "auto",
+    flex: 0,
     height: "100%",
     borderRadius: theme.spacing.borderRadius.sm,
     paddingHorizontal: theme.spacing.sizes.sm,

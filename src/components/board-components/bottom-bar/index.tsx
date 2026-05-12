@@ -1,11 +1,11 @@
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { usePanel } from "@/providers/panel";
+import { useBoard } from "@/providers/board";
 import { Entypo } from "@expo/vector-icons";
 import { Dimensions, View } from "react-native";
 import { BottomBarItem } from "./bottom-bar-item";
 
 export function BottomBar() {
-  const { handlePanelModal } = usePanel();
+  const { handleFormTaskModal, updateTaskModalType } = useBoard();
 
   const black = useThemeColor({}, "black");
   const border = useThemeColor({}, "border");
@@ -27,7 +27,16 @@ export function BottomBar() {
         borderTopColor: border,
         backgroundColor: background,
       }}>
-      <BottomBarItem Icon={Entypo} iconName="plus" iconSize={40} isPrincipal onPress={handlePanelModal} />
+      <BottomBarItem
+        Icon={Entypo}
+        iconName="plus"
+        iconSize={40}
+        isPrincipal
+        onPress={() => {
+          updateTaskModalType("create");
+          handleFormTaskModal();
+        }}
+      />
     </View>
   );
 }

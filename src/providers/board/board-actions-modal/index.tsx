@@ -19,7 +19,7 @@ export function BoardActionsModal(props: BoardActionsModalProps) {
 
   const router = useRouter();
 
-  const { updateModalType, handlePanelModal, resetFormPanelValues } = usePanel();
+  const { updatePanelModalType, handlePanelModal, resetFormPanelValues } = usePanel();
 
   async function handleRemovePanel() {
     Alert.alert("Remover quadro", "Deseja remover este quadro?", [
@@ -44,10 +44,9 @@ export function BoardActionsModal(props: BoardActionsModalProps) {
   async function handleEditPanel() {
     if (id) {
       const panel = await getPanel(id);
-
-      updateModalType("edit");
+      if (panel) resetFormPanelValues(panel);
+      updatePanelModalType("edit");
       handlePanelModal();
-      resetFormPanelValues(panel);
     } else {
       Alert.alert("Erro", "Painel não encontrado");
     }

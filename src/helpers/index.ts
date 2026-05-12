@@ -6,3 +6,26 @@ export function isEmpty(value: unknown) {
   if (typeof value === "object") return Object.keys(value).length === 0; // se for objeto e nao tiver campos
   return false;
 }
+
+interface FromatedDateToBRInterface {
+  date: Date;
+  time?: Date;
+}
+
+export function formatDateToBR(props: FromatedDateToBRInterface) {
+  const { date, time } = props;
+  const parsedDate = new Date(date);
+  const parsedTime = time ? new Date(time) : undefined;
+
+  let timeLimit = parsedDate;
+  if (parsedTime) {
+    timeLimit = new Date(
+      parsedDate.getFullYear(),
+      parsedDate.getMonth(),
+      parsedDate.getDate(),
+      parsedTime.getHours(),
+      parsedTime.getMinutes(),
+    );
+  }
+  return timeLimit.toLocaleString("pt-BR");
+}

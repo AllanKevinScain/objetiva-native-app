@@ -1,4 +1,5 @@
 import { PANELS_TABLE_NAME } from "@/constants/async-tables";
+import { useModalType } from "@/hooks/use-modal-type";
 import { usePanelAsyncStorage } from "@/hooks/use-panel-async-storage";
 import type { PanelSchemaInfertype } from "@/schemas";
 import * as Crypto from "expo-crypto";
@@ -6,19 +7,16 @@ import { useCallback, useMemo } from "react";
 import { FormProvider } from "react-hook-form";
 import type { ProvidersProps } from "../providers.type";
 import { PanelContext } from "./context";
-import { useModalType } from "./hooks/use-modal-type";
 import { usePanelForm } from "./hooks/use-panel-form";
 import { usePanelModal } from "./hooks/use-panel-modal";
 import { usePanelsArray } from "./hooks/use-panels-array";
 import { PanelModal } from "./panel-modal";
 
-export type PanelModalType = "create" | "edit";
-
 export function PanelProvider({ children }: ProvidersProps) {
   const { addPanel, editPanel } = usePanelAsyncStorage(PANELS_TABLE_NAME);
 
   const { panelModalState, handlePanelModal } = usePanelModal();
-  const { modalType, updateModalType } = useModalType();
+  const { modalType, updateModalType: updatePanelModalType } = useModalType();
   const { defaultValues, formPanelMethods, resetFormPanelValues } = usePanelForm();
   const { fieldArrayPanelsMethods, panelsMethods } = usePanelsArray();
 
@@ -51,11 +49,18 @@ export function PanelProvider({ children }: ProvidersProps) {
       panelsMethods,
       fieldArrayPanelsMethods,
       handlePanelModal,
-      updateModalType,
+      updatePanelModalType,
       resetFormPanelValues,
       defaultValues,
     }),
-    [panelsMethods, fieldArrayPanelsMethods, handlePanelModal, updateModalType, resetFormPanelValues, defaultValues],
+    [
+      panelsMethods,
+      fieldArrayPanelsMethods,
+      handlePanelModal,
+      updatePanelModalType,
+      resetFormPanelValues,
+      defaultValues,
+    ],
   );
 
   return (

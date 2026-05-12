@@ -37,6 +37,9 @@ export function usePanelAsyncStorage(key: string) {
 
   async function getPanel(id: string) {
     let items = ((await getData(key)) as PanelSchemaInfertype[]) || [];
+
+    if (!Array.isArray(items)) return null;
+
     return items.find((panel) => panel.id === id);
   }
 

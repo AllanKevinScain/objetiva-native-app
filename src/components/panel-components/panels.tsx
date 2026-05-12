@@ -10,7 +10,7 @@ import { FlatList } from "react-native";
 import { PanelItem } from "./panel-item";
 
 export function Panels() {
-  const { panelsMethods, updateModalType, handlePanelModal, fieldArrayPanelsMethods } = usePanel();
+  const { panelsMethods, updatePanelModalType, handlePanelModal, fieldArrayPanelsMethods } = usePanel();
   const { getData } = useAsyncStorage();
   const { replace } = fieldArrayPanelsMethods;
 
@@ -31,12 +31,11 @@ export function Panels() {
   return (
     <FlatList
       data={fields}
-      keyExtractor={({ id }) => id!}
+      keyExtractor={(item, index) => item.id || index.toString()}
       contentContainerStyle={{ gap: 10 }}
       renderItem={({ item }) => (
         <PanelItem
           {...item}
-          key={item.id}
           onPress={() =>
             push({
               pathname: "/panels/(board)/[id]",
@@ -49,7 +48,7 @@ export function Panels() {
         <EmptyList
           buttonContent="Adicionar quadro de tarefas"
           onButtonPress={() => {
-            updateModalType("create");
+            updatePanelModalType("create");
             handlePanelModal();
           }}
         />

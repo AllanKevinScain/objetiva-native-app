@@ -1,9 +1,10 @@
+import { useAsyncStorage } from "@/hooks/use-async-storage";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { useBoard } from "@/providers/board";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import type { Href } from "expo-router";
 import { useRouter } from "expo-router";
-import { TouchableOpacity, View } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { TextApp } from "../text-app";
 import { style } from "./style";
@@ -18,12 +19,14 @@ export function Header(props: HeaderProps) {
   const { name, back, isPrincipalPage = false } = props;
   const { handleActionsModal } = useBoard();
 
-  const { push, back: goBack } = useRouter();
+  const { clearAll } = useAsyncStorage();
+
+  const { push, back: goBack, replace } = useRouter();
 
   const primaryColor = useThemeColor({}, "primary");
   const textOnPrimary = useThemeColor({}, "textOnPrimary");
 
-  const handleBack = () => {
+  function handleBack() {
     const href = back?.href as Href;
 
     if (href) {
@@ -31,7 +34,12 @@ export function Header(props: HeaderProps) {
     } else {
       goBack();
     }
-  };
+  }
+
+  async function clearAllData() {
+    await clearAll();
+    replace("/");
+  }
 
   return (
     <View style={[style.header, { backgroundColor: primaryColor }]}>
@@ -66,6 +74,26 @@ export function Header(props: HeaderProps) {
         {!isPrincipalPage && (
           <TouchableOpacity style={style.menuButton} onPress={handleActionsModal}>
             <FontAwesome5 name="ellipsis-v" size={20} color={textOnPrimary} />
+          </TouchableOpacity>
+        )}
+
+        {isPrincipalPage && (
+          <TouchableOpacity
+            style={style.menuButton}
+            onPress={() => {
+              Alert.alert("Limpar memória", "Deseja remover todo seu progresso?", [
+                {
+                  text: "Cancelar",
+                  style: "cancel",
+                },
+                {
+                  text: "Limpar",
+                  style: "default",
+                  onPress: clearAllData,
+                },
+              ]);
+            }}>
+            <Ionicons name="trash" size={20} color={textOnPrimary} />
           </TouchableOpacity>
         )}
       </View>
