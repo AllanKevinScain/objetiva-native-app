@@ -1,12 +1,31 @@
 import { AnimatedView } from "@/components/animated-view";
-import { BottomBar, Panels } from "@/components/panel-components";
+import type { StructureModeType } from "@/components/panel-components";
+import { BottomBar, ChooseStructureMode, Panels } from "@/components/panel-components";
+import { Skeleton } from "@/components/skeleton";
 import { TextApp } from "@/components/text-app";
-import { TouchableOpacityApp } from "@/components/touchableopacity-app";
-import { theme } from "@/constants/theme";
-import { Entypo } from "@expo/vector-icons";
-import { FlatList, View } from "react-native";
+import { useAsyncStructureMode } from "@/hooks/use-async-structure-mode";
+import { useEffect, useState } from "react";
+import { Dimensions, View } from "react-native";
 
 export default function PanelIndex() {
+  const { isLoadingStructure, getStructure, toggleStructure } = useAsyncStructureMode();
+  const [structureMode, setMode] = useState<StructureModeType>(null);
+
+  async function handleStructureMode(mode: StructureModeType) {
+    if (mode === structureMode) return;
+    setMode(mode);
+    await toggleStructure(mode);
+  }
+
+  useEffect(() => {
+    async function load() {
+      const structure = await getStructure();
+      if (structure) setMode(structure);
+    }
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <AnimatedView>
       <View style={{ gap: 30 }}>
@@ -19,27 +38,13 @@ export default function PanelIndex() {
           </TextApp>
         </View>
 
-        <FlatList
-          data={["grid", "row"]}
-          keyExtractor={(item) => item}
-          numColumns={1}
-          contentContainerStyle={{
-            gap: 20,
-            flexDirection: "row",
-          }}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacityApp
-                key={item}
-                variant="ghost"
-                style={{ padding: 10, borderRadius: theme.spacing.borderRadius.lg }}>
-                <Entypo size={24} name={item === "grid" ? "grid" : "list"} />
-              </TouchableOpacityApp>
-            );
-          }}
-        />
+        <ChooseStructureMode handleStructureMode={handleStructureMode} />
 
-        <Panels />
+        {isLoadingStructure ? (
+          <Skeleton height={Dimensions.get("window").height / 2} />
+        ) : (
+          <Panels structureMode={structureMode} />
+        )}
       </View>
 
       <BottomBar />

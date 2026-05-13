@@ -1,11 +1,9 @@
 import type { TextFieldProps } from "@/components/text-field-rhf/text-field";
 import { Textfield } from "@/components/text-field-rhf/text-field";
-import { useThemeColor } from "@/hooks/use-theme-color";
 import type { AndroidNativeProps } from "@react-native-community/datetimepicker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useMemo, useState } from "react";
-import { Modal, Platform, TouchableOpacity, View } from "react-native";
-import { style } from "./style";
+import { Platform, TouchableOpacity } from "react-native";
 
 type OmitTextFieldProps = Omit<TextFieldProps, "value" | "onChange">;
 
@@ -21,38 +19,34 @@ export function Datepicker(props: DatepickerProps) {
   const [show, setShow] = useState(false);
 
   const memoValue = useMemo(() => {
-    if (mode === "date") return value?.toLocaleDateString();
-    return value?.toLocaleTimeString();
-  }, [mode, value]);
+    if (!value) return "";
 
-  const white = useThemeColor({}, "white");
-  const transparent = useThemeColor({}, "transparent");
+    if (mode === "time") {
+      return value.toLocaleTimeString();
+    }
+
+    return value.toLocaleDateString();
+  }, [mode, value]);
 
   return (
     <>
       <TouchableOpacity onPress={() => setShow(true)}>
         <Textfield {...restTextfieldProps} editable={false} value={memoValue} />
       </TouchableOpacity>
-      <Modal transparent visible={show}>
-        <View style={[style.overlay, { backgroundColor: transparent }]}>
-          <View
-            style={[
-              style.container,
-              { backgroundColor: white },
-              Platform.OS === "android" && { backgroundColor: "transparent" },
-            ]}>
-            <DateTimePicker
-              value={value || new Date()}
-              mode={mode}
-              display={Platform.OS === "ios" ? "inline" : "default"}
-              onValueChange={(_, date) => {
-                onChange?.(date);
-                setShow(false);
-              }}
-            />
-          </View>
-        </View>
-      </Modal>
+      {show && (
+        <DateTimePicker
+          value={value || new Date()}
+          mode={mode}
+          display={Platform.OS === "ios" ? "inline" : "default"}
+          onChange={(_, date) => {
+            setShow(false);
+
+            if (date) {
+              onChange?.(date);
+            }
+          }}
+        />
+      )}
     </>
   );
 }

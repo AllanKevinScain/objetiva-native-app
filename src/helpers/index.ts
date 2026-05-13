@@ -29,3 +29,7 @@ export function formatDateToBR(props: FromatedDateToBRInterface) {
   }
   return timeLimit.toLocaleString("pt-BR");
 }
+
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

@@ -1,16 +1,20 @@
 import { BOARD_TABLE_NAME } from "@/constants/async-tables";
+import { sleep } from "@/helpers";
 import { useBoardAsyncStorage } from "@/hooks/use-board-async-storage";
 import { useBoard } from "@/providers/board";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useWatch } from "react-hook-form";
-import { FlatList } from "react-native";
+import { Dimensions, FlatList } from "react-native";
 import { EmptyList } from "../empty-list";
+import { Skeleton } from "../skeleton";
 import { TaskItem } from "./task-item";
 
 export function Tasks() {
   const { id: currentPageId } = useLocalSearchParams<{ id: string }>();
   const { getBoard } = useBoardAsyncStorage(BOARD_TABLE_NAME);
+
+  const [isLoadingTasks, setLoadingTasks] = useState(true);
 
   const { fieldArrayTasksMethods, handleFormTaskModal, handlePageId, tasksMethods, updateTaskModalType } = useBoard();
   const { replace } = fieldArrayTasksMethods;
@@ -19,14 +23,27 @@ export function Tasks() {
 
   useEffect(() => {
     async function load() {
-      if (!currentPageId) return;
-      const board = await getBoard(currentPageId);
+      setLoadingTasks(true);
+      try {
+        if (!currentPageId) return;
+        const board = await getBoard(currentPageId);
 
-      if (!board?.tasks.length) return replace([]);
-      else replace(board.tasks);
+        await sleep(600);
+        if (!board?.tasks.length) return replace([]);
+        else replace(board.tasks);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoadingTasks(false);
+      }
     }
     load();
-  }, [getBoard, currentPageId, replace]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (isLoadingTasks) {
+    return <Skeleton height={Dimensions.get("window").height / 2} />;
+  }
 
   return (
     <FlatList

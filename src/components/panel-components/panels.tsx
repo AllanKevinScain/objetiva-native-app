@@ -7,9 +7,15 @@ import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { useWatch } from "react-hook-form";
 import { FlatList } from "react-native";
+import type { StructureModeType } from "./choose-structure-mode";
 import { PanelItem } from "./panel-item";
 
-export function Panels() {
+interface PanelsProps {
+  structureMode: StructureModeType;
+}
+
+export function Panels(props: PanelsProps) {
+  const { structureMode } = props;
   const { panelsMethods, updatePanelModalType, handlePanelModal, fieldArrayPanelsMethods } = usePanel();
   const { getData } = useAsyncStorage();
   const { replace } = fieldArrayPanelsMethods;
@@ -26,13 +32,15 @@ export function Panels() {
       else replace(items);
     }
     load();
-  }, [getData, replace]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <FlatList
+      key={structureMode}
       data={fields}
       keyExtractor={(item, index) => item.id || index.toString()}
-      contentContainerStyle={{ gap: 10 }}
+      {...(structureMode === "grid" && { numColumns: 2, columnWrapperStyle: { gap: 14 } })}
       renderItem={({ item }) => (
         <PanelItem
           {...item}
