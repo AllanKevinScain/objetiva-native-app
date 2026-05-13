@@ -1,4 +1,5 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { theme } from "@/constants/theme";
+import { StyleSheet } from "react-native";
 
 export const style = StyleSheet.create({
   container: {
@@ -12,6 +13,6 @@ export const style = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    width: Dimensions.get("window").width / 2,
+    paddingHorizontal: theme.spacing.sizes.md,
   },
 });

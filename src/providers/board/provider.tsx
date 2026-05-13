@@ -101,16 +101,15 @@ export function BoardProvider({ children }: ProvidersProps) {
 
   return (
     <BoardContext.Provider value={contextValues}>
+      {children}
+      <BoardActionsModal visible={actionsModalVisible} onRequestClose={handleActionsModal} />
       <FormProvider {...taskFormMethods}>
-        {children}
-        <BoardActionsModal visible={actionsModalVisible} onRequestClose={handleActionsModal} />
         <TaskFormModal
           visible={formTaskVisible}
           onRequestClose={() => {
             handleFormTaskModal();
             resetFormTaskValues();
           }}
-          getValues={taskFormMethods.getValues}
           onSubmit={handleSubmit}
         />
       </FormProvider>

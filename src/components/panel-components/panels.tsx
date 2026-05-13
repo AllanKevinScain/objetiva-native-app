@@ -39,7 +39,7 @@ export function Panels() {
           onPress={() =>
             push({
               pathname: "/panels/(board)/[id]",
-              params: { id: item.id! },
+              params: { id: item.id!, title: item.title },
             })
           }
         />

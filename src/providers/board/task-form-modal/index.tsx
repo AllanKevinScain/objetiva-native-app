@@ -3,7 +3,6 @@ import { TextfieldRHF } from "@/components/text-field-rhf";
 import { TouchableOpacityApp } from "@/components/touchableopacity-app";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import type { TaskSchemaInfertype } from "@/schemas";
-import type { UseFormGetValues } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
 import { Dimensions, Text, View } from "react-native";
 import { DatepickerRHF } from "./date-picker-rhf";
@@ -13,14 +12,13 @@ import { style } from "./style";
 interface TaskFormModalProps {
   visible: boolean;
   onRequestClose: () => void;
-  getValues: UseFormGetValues<TaskSchemaInfertype>;
   onSubmit: (_: TaskSchemaInfertype) => void;
 }
 
 export function TaskFormModal(props: TaskFormModalProps) {
-  const { visible, onRequestClose, getValues, onSubmit } = props;
+  const { visible, onRequestClose, onSubmit } = props;
 
-  const { control } = useFormContext<TaskSchemaInfertype>();
+  const { control, handleSubmit } = useFormContext<TaskSchemaInfertype>();
 
   const textSecondary = useThemeColor({}, "textSecondary");
   const black = useThemeColor({}, "black");
@@ -68,7 +66,7 @@ export function TaskFormModal(props: TaskFormModalProps) {
         />
       </View>
       <FlagField />
-      <TouchableOpacityApp onPress={() => onSubmit(getValues())}>Salvar</TouchableOpacityApp>
+      <TouchableOpacityApp onPress={handleSubmit(onSubmit)}>Salvar</TouchableOpacityApp>
     </Dialog>
   );
 }

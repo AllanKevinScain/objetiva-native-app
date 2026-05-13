@@ -21,9 +21,7 @@ export function Dialog(props: DialogProps) {
   return (
     <Modal visible={visible} onRequestClose={onRequestClose} animationType="fade" transparent>
       <Pressable style={[style.container, { backgroundColor: transparent }]} onPress={onRequestClose}>
-        <Pressable
-          style={[style.modalContent, { height, backgroundColor: white }]}
-          onPress={(e) => e.stopPropagation()}>
+        <Pressable style={[style.modalContent, { height, backgroundColor: white }]}>
           <TouchableOpacity onPress={onRequestClose} style={{ position: "absolute", top: 4, right: 4, padding: 10 }}>
             <MaterialIcons name="close" size={30} color={black} />
           </TouchableOpacity>

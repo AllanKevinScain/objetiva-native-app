@@ -65,8 +65,8 @@ export function PanelProvider({ children }: ProvidersProps) {
 
   return (
     <PanelContext.Provider value={contextValue}>
-      <FormProvider {...panelsMethods}>
-        {children}
+      {children}
+      <FormProvider {...formPanelMethods}>
         <PanelModal
           modalType={modalType}
           visible={panelModalState}
@@ -75,8 +75,6 @@ export function PanelProvider({ children }: ProvidersProps) {
             resetFormPanelValues();
           }}
           onSubmit={handleSubmit}
-          control={formPanelMethods.control}
-          getValues={formPanelMethods.getValues}
         />
       </FormProvider>
     </PanelContext.Provider>

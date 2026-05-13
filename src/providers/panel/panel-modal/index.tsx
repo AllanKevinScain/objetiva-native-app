@@ -7,21 +7,21 @@ import type { ModalType } from "@/hooks/use-modal-type";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import type { PanelSchemaInfertype } from "@/schemas";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import type { Control, UseFormGetValues } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { View } from "react-native";
 import { style } from "./style";
 
 interface PanelModalProps {
   visible: boolean;
   modalType: ModalType;
-  control: Control<PanelSchemaInfertype>;
-  getValues: UseFormGetValues<PanelSchemaInfertype>;
   onSubmit: (_: PanelSchemaInfertype) => void;
   onRequestClose: () => void;
 }
 
 export function PanelModal(props: PanelModalProps) {
-  const { visible, modalType, onRequestClose, control, onSubmit, getValues } = props;
+  const { visible, modalType, onRequestClose, onSubmit } = props;
+
+  const { control, handleSubmit } = useFormContext<PanelSchemaInfertype>();
   const textSecondary = useThemeColor({}, "textSecondary");
   const black = useThemeColor({}, "black");
 
@@ -63,9 +63,7 @@ export function PanelModal(props: PanelModalProps) {
           style={{ borderRadius: theme.spacing.borderRadius.lg }}>
           <MaterialIcons name="close" size={30} color={black} />
         </TouchableOpacityApp>
-        <TouchableOpacityApp
-          onPress={() => onSubmit(getValues())}
-          style={{ borderRadius: theme.spacing.borderRadius.lg }}>
+        <TouchableOpacityApp onPress={handleSubmit(onSubmit)} style={{ borderRadius: theme.spacing.borderRadius.lg }}>
           <AntDesign name="check" size={30} color={black} />
         </TouchableOpacityApp>
       </View>

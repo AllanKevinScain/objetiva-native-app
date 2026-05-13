@@ -3,8 +3,8 @@ import { z } from "zod";
 
 export const panelSchema = z.object({
   id: z.uuid().nullish(),
-  title: z.string().min(1, REQUIRED_MESSAGE),
-  color: z.string().min(1, REQUIRED_MESSAGE),
+  title: z.string().min(1, REQUIRED_MESSAGE).nonempty(REQUIRED_MESSAGE),
+  color: z.string().min(1, REQUIRED_MESSAGE).nonempty(REQUIRED_MESSAGE),
 });
 export type PanelSchemaInfertype = z.infer<typeof panelSchema>;
 
