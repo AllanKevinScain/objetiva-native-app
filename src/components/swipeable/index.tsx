@@ -57,7 +57,7 @@ export function Swipeable(props: SwipeableProps) {
             e.stopPropagation();
             onRemove();
           }}>
-          Remove
+          Excluir
         </TouchableOpacityApp>
         <TouchableOpacityApp
           style={[
@@ -72,7 +72,7 @@ export function Swipeable(props: SwipeableProps) {
             onUpdated();
             handlePress();
           }}>
-          Update
+          Atualizar
         </TouchableOpacityApp>
       </View>
 

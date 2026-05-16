@@ -1,5 +1,6 @@
 import { AnimatedView } from "@/components/animated-view";
-import { BottomBar, Tasks } from "@/components/board-components";
+import { Tasks } from "@/components/board-components";
+import { BottomBar } from "@/components/bottom-bar";
 import { TextApp } from "@/components/text-app";
 import { TextfieldRHF } from "@/components/text-field-rhf";
 import { theme } from "@/constants/theme";
@@ -9,7 +10,7 @@ import { useWatch } from "react-hook-form";
 import { View } from "react-native";
 
 export default function BoardPanelIndex() {
-  const { tasksMethods } = useBoard();
+  const { tasksMethods, handleFormTaskModal, updateTaskModalType } = useBoard();
 
   const tasks = useWatch({ control: tasksMethods.control, name: "tasks" });
 
@@ -31,7 +32,14 @@ export default function BoardPanelIndex() {
 
       <Tasks />
 
-      {tasks.length > 0 && <BottomBar />}
+      {tasks.length > 0 && (
+        <BottomBar
+          onMiddleIconPress={() => {
+            updateTaskModalType("create");
+            handleFormTaskModal();
+          }}
+        />
+      )}
     </AnimatedView>
   );
 }

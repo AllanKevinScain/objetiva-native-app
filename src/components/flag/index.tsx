@@ -45,7 +45,7 @@ export function Flag(props: FlagProps) {
             opacity: selected ? 1 : 0.3,
           },
         ]}>
-        {caption?.toUpperCase()}
+        {caption === "urgent" ? "URGENTE" : "OPCIONAL"}
       </Text>
     </TouchableOpacity>
   );

@@ -5,17 +5,17 @@ import { theme } from "@/constants/theme";
 import { usePanelAsyncStorage } from "@/hooks/use-panel-async-storage";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { usePanel } from "@/providers/panel";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Alert, TouchableOpacity } from "react-native";
 
 interface BoardActionsModalProps {
   visible: boolean;
+  currentPageId: string | null;
   onRequestClose: () => void;
 }
 
 export function BoardActionsModal(props: BoardActionsModalProps) {
-  const { visible, onRequestClose } = props;
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { visible, onRequestClose, currentPageId } = props;
   const { getPanel, removePanel } = usePanelAsyncStorage(PANELS_TABLE_NAME);
 
   const router = useRouter();
@@ -35,8 +35,8 @@ export function BoardActionsModal(props: BoardActionsModalProps) {
       {
         text: "Remover",
         onPress: () => {
-          if (id) {
-            removePanel(id);
+          if (currentPageId) {
+            removePanel(currentPageId);
             router.replace("/panels");
           } else {
             Alert.alert("Erro", "Painel não encontrado");
@@ -47,8 +47,8 @@ export function BoardActionsModal(props: BoardActionsModalProps) {
   }
 
   async function handleEditPanel() {
-    if (id) {
-      const panel = await getPanel(id);
+    if (currentPageId) {
+      const panel = await getPanel(currentPageId);
       if (panel) resetFormPanelValues(panel);
       updatePanelModalType("edit");
       handlePanelModal();

@@ -8,7 +8,7 @@ export function usePanelForm() {
   const defaultValues: PanelSchemaInfertype = useMemo(
     () => ({
       title: "",
-      color: "#000",
+      color: "",
       id: undefined,
     }),
     [],

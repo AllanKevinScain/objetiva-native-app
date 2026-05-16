@@ -1,13 +1,16 @@
 import { AnimatedView } from "@/components/animated-view";
+import { BottomBar } from "@/components/bottom-bar";
 import type { StructureModeType } from "@/components/panel-components";
-import { BottomBar, ChooseStructureMode, Panels } from "@/components/panel-components";
+import { ChooseStructureMode, Panels } from "@/components/panel-components";
 import { Skeleton } from "@/components/skeleton";
 import { TextApp } from "@/components/text-app";
 import { useAsyncStructureMode } from "@/hooks/use-async-structure-mode";
+import { usePanel } from "@/providers/panel";
 import { useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
 
 export default function PanelIndex() {
+  const { handlePanelModal } = usePanel();
   const { isLoadingStructure, getStructure, toggleStructure } = useAsyncStructureMode();
   const [structureMode, setMode] = useState<StructureModeType>(null);
 
@@ -47,7 +50,7 @@ export default function PanelIndex() {
         )}
       </View>
 
-      <BottomBar />
+      <BottomBar onMiddleIconPress={handlePanelModal} />
     </AnimatedView>
   );
 }

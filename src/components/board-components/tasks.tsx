@@ -23,6 +23,7 @@ export function Tasks() {
 
   useEffect(() => {
     async function load() {
+      handlePageId(currentPageId);
       setLoadingTasks(true);
       try {
         if (!currentPageId) return;
@@ -58,7 +59,6 @@ export function Tasks() {
               buttonContent="Adicionar Tarefa"
               onButtonPress={() => {
                 updateTaskModalType("create");
-                handlePageId(currentPageId);
                 handleFormTaskModal();
               }}
             />

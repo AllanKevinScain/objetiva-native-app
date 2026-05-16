@@ -26,7 +26,7 @@ export function FlagField() {
 
   return (
     <View>
-      <Text style={[style.textFlags, { color: black }]}>Priority:</Text>
+      <Text style={[style.textFlags, { color: black }]}>Prioridade:</Text>
       <View style={style.containerFlags}>
         {flags.map((flag) => {
           return (

@@ -73,7 +73,7 @@ export function TaskItem(props: TaskItemProps) {
             {formatDateToBR({ date: limitDate, time: limitTime }).replace(" ", " - ")}
           </Text>
           {at_updated && (
-            <Text style={style.description}>Create at: {formatDateToBR({ date: at_updated }).replace(" ", " - ")}</Text>
+            <Text style={style.description}>Criado em: {formatDateToBR({ date: at_updated }).replace(" ", " - ")}</Text>
           )}
         </View>
         <Flag caption={flag} disabled />

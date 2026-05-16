@@ -44,12 +44,12 @@ export function Panels(props: PanelsProps) {
       renderItem={({ item }) => (
         <PanelItem
           {...item}
-          onPress={() =>
+          onPress={() => {
             push({
               pathname: "/panels/(board)/[id]",
               params: { id: item.id!, title: item.title },
-            })
-          }
+            });
+          }}
         />
       )}
       ListEmptyComponent={() => (

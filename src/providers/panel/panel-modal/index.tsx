@@ -1,3 +1,4 @@
+import { ColorpickerRHF } from "@/components/color-picker-field";
 import { Dialog } from "@/components/dialog";
 import { TextApp } from "@/components/text-app";
 import { TextfieldRHF } from "@/components/text-field-rhf";
@@ -6,9 +7,9 @@ import { theme } from "@/constants/theme";
 import type { ModalType } from "@/hooks/use-modal-type";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import type { PanelSchemaInfertype } from "@/schemas";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useFormContext } from "react-hook-form";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { style } from "./style";
 
 interface PanelModalProps {
@@ -26,7 +27,10 @@ export function PanelModal(props: PanelModalProps) {
   const black = useThemeColor({}, "black");
 
   return (
-    <Dialog visible={visible} onRequestClose={onRequestClose}>
+    <Dialog
+      visible={visible}
+      onRequestClose={onRequestClose}
+      heightContainerModal={Dimensions.get("window").height / 1.5}>
       <TextApp type="subtitle" style={[style.title, { color: black }]}>
         {modalType === "create" ? "Novo" : "Editar"} quadro de tarefas
       </TextApp>
@@ -44,16 +48,7 @@ export function PanelModal(props: PanelModalProps) {
           ]}
           placeholder="Digite o título da tarefa"
         />
-        <TextfieldRHF
-          control={control}
-          name="color"
-          label="Cor:"
-          labelStyle={style.inputLabel}
-          containerStyle={{ height: 100, borderRadius: 20 }}
-          multiline
-          numberOfLines={5}
-          placeholder="Sobre o que é a tarefa?"
-        />
+        <ColorpickerRHF control={control} name="color" />
       </View>
 
       <View style={style.header}>
@@ -64,7 +59,7 @@ export function PanelModal(props: PanelModalProps) {
           <MaterialIcons name="close" size={30} color={black} />
         </TouchableOpacityApp>
         <TouchableOpacityApp onPress={handleSubmit(onSubmit)} style={{ borderRadius: theme.spacing.borderRadius.lg }}>
-          <AntDesign name="check" size={30} color={black} />
+          <Entypo name="check" size={30} color={black} />
         </TouchableOpacityApp>
       </View>
     </Dialog>
