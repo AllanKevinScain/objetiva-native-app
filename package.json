@@ -7,12 +7,12 @@
   "scripts": {
     "start": "expo start",
     "dev": "expo start -c",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
     "lint": "expo lint",
-    "format": "prettier --config .prettierrc.cjs --write \"src/**/*.ts\""
+    "format": "prettier --config .prettierrc.cjs --write \"src/**/*.ts\"",
+    "apk:apk": "eas build:configure && eas build -p android --profile preview",
+    "apk:aab": "eas build:configure && eas build --platform android"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
