@@ -59,7 +59,7 @@ export function TaskItem(props: TaskItemProps) {
 
   return (
     <View style={style.container}>
-      <Ball id={id} />
+      <Ball id={id} pageId={pageId} />
 
       <Swipeable
         styleContainer={[style.swipeableContainer, { backgroundColor: surface, borderColor: border }]}

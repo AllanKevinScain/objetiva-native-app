@@ -1,12 +1,14 @@
 import { Dialog } from "@/components/dialog";
 import { TextApp } from "@/components/text-app";
-import { PANELS_TABLE_NAME } from "@/constants/async-tables";
+import { BOARD_TABLE_NAME, PANELS_TABLE_NAME } from "@/constants/async-tables";
 import { theme } from "@/constants/theme";
+import { useBoardAsyncStorage } from "@/hooks/use-board-async-storage";
 import { usePanelAsyncStorage } from "@/hooks/use-panel-async-storage";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { usePanel } from "@/providers/panel";
 import { useRouter } from "expo-router";
 import { Alert, TouchableOpacity } from "react-native";
+import { useBoard } from "../hooks/use-board-provider";
 
 interface BoardActionsModalProps {
   visible: boolean;
@@ -17,10 +19,11 @@ interface BoardActionsModalProps {
 export function BoardActionsModal(props: BoardActionsModalProps) {
   const { visible, onRequestClose, currentPageId } = props;
   const { getPanel, removePanel } = usePanelAsyncStorage(PANELS_TABLE_NAME);
-
+  const { replaceTasks } = useBoardAsyncStorage(BOARD_TABLE_NAME);
   const router = useRouter();
 
   const { updatePanelModalType, handlePanelModal, resetFormPanelValues } = usePanel();
+  const { tasksMethods, handleActionsModal } = useBoard();
 
   const surfaceSecondary = useThemeColor({}, "surfaceSecondary");
   const warning = useThemeColor({}, "warning");
@@ -57,6 +60,23 @@ export function BoardActionsModal(props: BoardActionsModalProps) {
     }
   }
 
+  async function handleChangeAllBullets() {
+    let tasks = tasksMethods.getValues().tasks;
+    if (tasks) {
+      const allSelected = tasks.every((task) => task.selected);
+      tasks = tasks.map((task) => {
+        if (allSelected) return { ...task, selected: false };
+        else return { ...task, selected: true };
+      });
+      if (currentPageId) {
+        await replaceTasks(currentPageId, tasks);
+        tasksMethods.reset({ tasks, search: "" });
+      }
+    }
+
+    handleActionsModal();
+  }
+
   return (
     <Dialog visible={visible} onRequestClose={onRequestClose}>
       <TouchableOpacity
@@ -79,6 +99,14 @@ export function BoardActionsModal(props: BoardActionsModalProps) {
         }}
         onPress={handleRemovePanel}>
         <TextApp type="defaultSemiBold">Excluir este quadro</TextApp>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          padding: 16,
+          backgroundColor: surfaceSecondary,
+        }}
+        onPress={handleChangeAllBullets}>
+        <TextApp type="defaultSemiBold">Selecionar todos</TextApp>
       </TouchableOpacity>
     </Dialog>
   );

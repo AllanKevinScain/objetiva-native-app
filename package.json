@@ -1,7 +1,7 @@
 {
   "name": "objetiva",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "lint": "expo lint",
     "format": "prettier --config .prettierrc.cjs --write \"src/**/*.ts\"",
     "apk:apk": "eas build:configure && eas build -p android --profile preview",
-    "apk:aab": "eas build:configure && eas build --platform android"
+    "apk:aab": "eas build:configure && eas build -p android --profile production"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

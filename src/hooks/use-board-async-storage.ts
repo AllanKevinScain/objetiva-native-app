@@ -1,8 +1,8 @@
-import type { BoardSchemaInfertype } from "@/schemas";
+import type { BoardSchemaInfertype, TaskSchemaInfertype } from "@/schemas";
 import { useAsyncStorage } from "./use-async-storage";
 
 export function useBoardAsyncStorage(key: string) {
-  const { getData, addData } = useAsyncStorage();
+  const { getData, addData, editData } = useAsyncStorage();
 
   async function getBoard(id: string) {
     const boards = ((await getData(key)) as BoardSchemaInfertype[]) || [];
@@ -21,5 +21,44 @@ export function useBoardAsyncStorage(key: string) {
     return items;
   }
 
-  return { getBoard, addBoard };
+  async function editBoard(boardId: string | undefined, taskId: string, data: TaskSchemaInfertype) {
+    let items = ((await getData(key)) as BoardSchemaInfertype[]) || [];
+    if (items) {
+      items = items.map((board) => {
+        if (boardId) {
+          if (board.id === boardId) {
+            board.tasks = board.tasks.map((task) => {
+              if (task.id === taskId) return data;
+              return task;
+            });
+          }
+          return board;
+        }
+
+        return board;
+      });
+    }
+    await editData(key, items);
+
+    return items;
+  }
+
+  async function replaceTasks(boardId: string | undefined, data: TaskSchemaInfertype[]) {
+    let items = ((await getData(key)) as BoardSchemaInfertype[]) || [];
+
+    if (items) {
+      items = items.map((board) => {
+        if (boardId) {
+          if (board.id === boardId) return { id: board.id, tasks: data };
+          return board;
+        }
+        return board;
+      });
+    }
+    await editData(key, items);
+
+    return items;
+  }
+
+  return { getBoard, addBoard, editBoard, replaceTasks };
 }
