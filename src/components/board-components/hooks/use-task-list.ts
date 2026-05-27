@@ -38,7 +38,7 @@ export function useTaskList(
 
     const data = {
       ...tasks?.[taskIndex],
-      description: value,
+      description: value.trim(),
     };
     update(taskIndex, data);
 
@@ -79,7 +79,7 @@ export function useTaskList(
 
       return {
         ...panel,
-        tasks,
+        tasks: tasks.map((task) => ({ ...task, description: task.description?.trim() })),
       };
     });
 
