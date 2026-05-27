@@ -1,73 +1,108 @@
-import { BOARD_TABLE_NAME } from "@/constants/async-tables";
-import { sleep } from "@/helpers";
-import { useBoardAsyncStorage } from "@/hooks/use-board-async-storage";
-import { useBoard } from "@/providers/board";
-import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { useWatch } from "react-hook-form";
-import { Dimensions, FlatList } from "react-native";
-import { EmptyList } from "../empty-list";
-import { Skeleton } from "../skeleton";
-import { TaskItem } from "./task-item";
+import { useAppTheme } from "@/hooks/use-app-theme";
+import { usePanel } from "@/providers/panel";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { Controller, useFieldArray, useWatch } from "react-hook-form";
+import { FlatList, TextInput, TouchableOpacity, View } from "react-native";
+
+import { useCallback } from "react";
+import { useTaskList } from "./hooks/use-task-list";
+import { style } from "./style";
 
 export function Tasks() {
-  const { id: currentPageId } = useLocalSearchParams<{ id: string }>();
-  const { getBoard } = useBoardAsyncStorage(BOARD_TABLE_NAME);
+  const { index } = useLocalSearchParams<{ index: string }>();
+  const panelIndex = Number(index);
 
-  const [isLoadingTasks, setLoadingTasks] = useState(true);
+  const { colors, font } = useAppTheme();
+  const { panelsMethods } = usePanel();
 
-  const { fieldArrayTasksMethods, handleFormTaskModal, handlePageId, tasksMethods, updateTaskModalType } = useBoard();
-  const { replace } = fieldArrayTasksMethods;
+  const tasksArrayMethods = useFieldArray({
+    control: panelsMethods.control,
+    name: `panels.${panelIndex}.tasks`,
+    keyName: "key",
+  });
 
-  const fields = useWatch({ control: tasksMethods.control, name: "tasks" });
+  const tasks = useWatch({ control: panelsMethods.control, name: `panels.${panelIndex}.tasks` });
 
-  useEffect(() => {
-    async function load() {
-      handlePageId(currentPageId);
-      setLoadingTasks(true);
-      try {
-        if (!currentPageId) return;
-        const board = await getBoard(currentPageId);
+  const { editLine, handleCheck, newLine, removeLine, replaceTasks } = useTaskList(tasks, tasksArrayMethods);
 
-        await sleep(600);
-        if (!board?.tasks.length) return replace([]);
-        else replace(board.tasks);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoadingTasks(false);
-      }
-    }
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        const currentTasks = panelsMethods.getValues(`panels.${panelIndex}.tasks`);
 
-  if (isLoadingTasks) {
-    return <Skeleton height={Dimensions.get("window").height / 2} />;
-  }
+        replaceTasks(currentTasks);
+      };
+    }, [panelIndex, panelsMethods, replaceTasks]),
+  );
 
   return (
     <FlatList
-      data={fields}
-      keyExtractor={(item, index) => item.id || index.toString()}
-      renderItem={({ item }) => <TaskItem {...item} pageId={currentPageId} />}
-      contentContainerStyle={{ paddingBottom: 80 }}
-      ListEmptyComponent={() => {
-        if (fields.length === 0) {
-          return (
-            <EmptyList
-              buttonContent="Adicionar Tarefa"
-              onButtonPress={() => {
-                updateTaskModalType("create");
-                handleFormTaskModal();
-              }}
-            />
-          );
-        }
+      data={tasksArrayMethods.fields}
+      keyExtractor={(item, index) => item.id ?? String(index)}
+      renderItem={({ item, index: taskIndex }) => {
+        const selected = item.selected;
 
         return (
-          <EmptyList message="Nenhuma tarefa encontrada." buttonContent="Limpar pesquisa" onButtonPress={() => null} />
+          <View style={style.container}>
+            <TouchableOpacity onPress={() => handleCheck({ panelIndex, taskId: item.id! })}>
+              <View
+                style={[
+                  style.containerBall,
+                  selected
+                    ? {
+                        backgroundColor: colors.primary,
+                        borderColor: colors.border,
+                      }
+                    : {
+                        borderColor: "white",
+                      },
+                ]}>
+                {selected && <FontAwesome5 name="check" color="white" size={18} />}
+              </View>
+            </TouchableOpacity>
+
+            <Controller
+              control={panelsMethods.control}
+              name={`panels.${panelIndex}.tasks.${taskIndex}.description`}
+              render={({ field: { value, onChange } }) => (
+                <TextInput
+                  value={value ?? undefined}
+                  onChangeText={onChange}
+                  autoFocus={taskIndex === tasksArrayMethods.fields.length - 1}
+                  multiline
+                  submitBehavior="submit"
+                  style={{
+                    flex: 1,
+                    fontSize: 16,
+                    color: colors.text,
+                    fontFamily: font.regular,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.border,
+                    textAlignVertical: "top",
+                    textDecorationLine: selected ? "line-through" : "none",
+                  }}
+                  onSubmitEditing={newLine}
+                  onBlur={() => editLine(item.id!, value)}
+                  onKeyPress={(e) =>
+                    removeLine({
+                      event: e,
+                      taskId: item.id!,
+                    })
+                  }
+                />
+              )}
+            />
+          </View>
         );
+      }}
+      contentContainerStyle={{
+        paddingBottom: 80,
+      }}
+      style={{
+        padding: 0,
+        margin: 0,
+        gap: 0,
       }}
     />
   );

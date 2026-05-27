@@ -1,10 +1,9 @@
 import { Dialog } from "@/components/dialog";
 import { TextApp } from "@/components/text-app";
-import { BOARD_TABLE_NAME, PANELS_TABLE_NAME } from "@/constants/async-tables";
+import { PANELS_TABLE_NAME } from "@/constants/async-tables";
 import { theme } from "@/constants/theme";
-import { useBoardAsyncStorage } from "@/hooks/use-board-async-storage";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { usePanelAsyncStorage } from "@/hooks/use-panel-async-storage";
-import { useThemeColor } from "@/hooks/use-theme-color";
 import { usePanel } from "@/providers/panel";
 import { useRouter } from "expo-router";
 import { Alert, TouchableOpacity } from "react-native";
@@ -19,15 +18,13 @@ interface BoardActionsModalProps {
 export function BoardActionsModal(props: BoardActionsModalProps) {
   const { visible, onRequestClose, currentPageId } = props;
   const { getPanel, removePanel } = usePanelAsyncStorage(PANELS_TABLE_NAME);
-  const { replaceTasks } = useBoardAsyncStorage(BOARD_TABLE_NAME);
   const router = useRouter();
 
-  const { updatePanelModalType, handlePanelModal, resetFormPanelValues } = usePanel();
-  const { tasksMethods, handleActionsModal } = useBoard();
+  const { updatePanelModalType, handlePanelModal, resetFormPanelValues, panelsMethods, fieldArrayPanelsMethods } =
+    usePanel();
+  const { handleActionsModal } = useBoard();
 
-  const surfaceSecondary = useThemeColor({}, "surfaceSecondary");
-  const warning = useThemeColor({}, "warning");
-  const error = useThemeColor({}, "error");
+  const { colors } = useAppTheme();
 
   async function handleRemovePanel() {
     Alert.alert("Remover quadro", "Deseja remover este quadro?", [
@@ -37,9 +34,19 @@ export function BoardActionsModal(props: BoardActionsModalProps) {
       },
       {
         text: "Remover",
-        onPress: () => {
+        onPress: async () => {
           if (currentPageId) {
-            removePanel(currentPageId);
+            const panels = panelsMethods.getValues("panels");
+            const index = panels.findIndex((f) => f.id === currentPageId);
+
+            if (index !== -1) {
+              fieldArrayPanelsMethods.remove(index);
+
+              await removePanel(currentPageId);
+            }
+
+            handleActionsModal();
+
             router.replace("/panels");
           } else {
             Alert.alert("Erro", "Painel não encontrado");
@@ -60,32 +67,15 @@ export function BoardActionsModal(props: BoardActionsModalProps) {
     }
   }
 
-  async function handleChangeAllBullets() {
-    let tasks = tasksMethods.getValues().tasks;
-    if (tasks) {
-      const allSelected = tasks.every((task) => task.selected);
-      tasks = tasks.map((task) => {
-        if (allSelected) return { ...task, selected: false };
-        else return { ...task, selected: true };
-      });
-      if (currentPageId) {
-        await replaceTasks(currentPageId, tasks);
-        tasksMethods.reset({ tasks, search: "" });
-      }
-    }
-
-    handleActionsModal();
-  }
-
   return (
     <Dialog visible={visible} onRequestClose={onRequestClose}>
       <TouchableOpacity
         style={{
           padding: 16,
           marginTop: 32,
-          borderColor: warning,
+          borderColor: colors.secondary,
           borderBottomWidth: 4,
-          backgroundColor: surfaceSecondary,
+          backgroundColor: colors.bg,
           borderTopLeftRadius: theme.spacing.borderRadius.lg,
           borderTopRightRadius: theme.spacing.borderRadius.lg,
         }}
@@ -95,18 +85,10 @@ export function BoardActionsModal(props: BoardActionsModalProps) {
       <TouchableOpacity
         style={{
           padding: 16,
-          backgroundColor: error,
+          backgroundColor: colors.secondary,
         }}
         onPress={handleRemovePanel}>
         <TextApp type="defaultSemiBold">Excluir este quadro</TextApp>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          padding: 16,
-          backgroundColor: surfaceSecondary,
-        }}
-        onPress={handleChangeAllBullets}>
-        <TextApp type="defaultSemiBold">Selecionar todos</TextApp>
       </TouchableOpacity>
     </Dialog>
   );

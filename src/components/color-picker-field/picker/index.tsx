@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Text, View } from "react-native";
 
 import { style } from "./styles";
@@ -13,7 +13,8 @@ export interface PickerProps {
 
 export function Picker(props: PickerProps) {
   const { value, onChangeValue, messageError } = props;
-  const error = useThemeColor({}, "error");
+  const { colors } = useAppTheme();
+  const error = colors.secondary;
 
   return (
     <View style={style.container}>

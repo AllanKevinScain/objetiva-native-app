@@ -1,80 +1,48 @@
-# Projeto Objetiva - Diretrizes e Arquitetura
+# Projeto Objetiva - Guia de Desenvolvimento
 
-Este arquivo contém as diretrizes de desenvolvimento, padrões de design e arquitetura do projeto.
+Este documento descreve as convenções arquiteturais, padrões de estilo e fluxos de trabalho estabelecidos para este repositório.
 
-## Sistema de Temas
+## 🎨 Sistema de Temas e Estilização
 
-O projeto utiliza um sistema de temas dinâmico que suporta modo Claro (Light) e Escuro (Dark).
+O projeto utiliza o `ThemeProvider` do `@react-navigation/native` como fonte única de verdade para o tema.
 
-- **Cores:** Definidas em `src/constants/colors.ts`.
-- **Hook de Acesso:** Utilize sempre o hook `useThemeColor` para garantir que os componentes respondam às mudanças de tema do sistema.
-  ```typescript
-  const backgroundColor = useThemeColor({}, "background");
-  ```
-- **ThemeProvider:** O `ThemeProvider` está configurado no `src/app/_layout.tsx`, integrando-se ao `react-navigation`.
+### Cores Base
+O tema foi simplificado para 5 chaves principais, acessíveis através do hook `useAppTheme`:
+- `bg`: Cor de fundo principal e superfícies.
+- `text`: Cor principal para textos e ícones de alto contraste.
+- `primary`: Cor de destaque principal (ex: botões de ação, headers).
+- `secondary`: Cor de destaque secundária (ex: avisos, erros, estados urgentes).
+- `border`: Cor para bordas, divisores e skeletons.
 
-## Componentes Core
+### Tipografia
+A fonte principal do projeto é a **Roboto**.
+- **Configuração:** Localizada em `src/constants/theme/fonts.ts`.
+- **Uso:** Deve-se preferir o uso do componente `<TextApp />` que já integra as variações da Roboto conforme a propriedade `type`.
+- **Variações disponíveis:** Regular (400), Medium (500), Bold (700), Black (900).
 
-### TextApp
+### Hook de Tema: `useAppTheme`
+Sempre utilize o hook `useAppTheme` para acessar cores, fontes e espaçamentos. Nunca acesse `theme.color.dark.xxx` diretamente nos componentes.
 
-Componente central para textos. Suporta diferentes tipos (`title`, `subtitle`, `default`, `defaultSemiBold`, `link`) e cores dinâmicas via props `lightColor` e `darkColor`.
+```tsx
+const { colors, font, spacing } = useAppTheme();
+```
 
-### TouchableOpacityApp
+## 🏗️ Arquitetura de Componentes
 
-Botão padrão do sistema.
+### Padrões de UI
+- **Sombras:** Utilize o padrão de `shadow` para iOS e `elevation` para Android para dar profundidade aos cards (ex: `PanelItem`, `TaskItem`).
+- **Cards:** Devem possuir bordas arredondadas (preferencialmente `borderRadius: 16`) e separação clara via `border` ou `shadow`.
+- **Feedback Visual:** Interações como `TouchableOpacity` devem usar `activeOpacity={0.7}` ou `0.8`.
 
-- **Variantes:** `primary` (padrão), `secondary`, `ghost`.
-- **Comportamento:** Gerencia automaticamente estados de `loading` e `disabled` com feedback visual e cores do tema.
+## 📁 Estrutura de Pastas
 
-### Header
+- `src/components`: Componentes reutilizáveis e atômicos.
+- `src/app`: Rotas e layouts baseados no Expo Router.
+- `src/providers`: Contextos de estado global (Board, Panel).
+- `src/hooks`: Hooks customizados (incluindo `useAppTheme`).
+- `src/constants/theme`: Definições brutas de cores, fontes e espaçamentos.
 
-Componente de cabeçalho customizado inserido nas `screenOptions` do Expo Router.
-
-- Ocupa a área correta no topo da tela, respeitando o `StatusBar` no Android e o `SafeAre` no iOS.
-- Recebe automaticamente informações de navegação (`back`) e nome da rota.
-
-### AnimatedScrollView
-
-Componente padrão para telas com scroll.
-
-- Já possui `padding` e `gap` pré-configurados para manter a consistência visual.
-- Utiliza `react-native-reanimated`.
-
-## Estrutura de Navegação
-
-- Utiliza **Expo Router** (File-based routing).
-- Rotas principais localizadas em `src/app/`.
-- Grupos de telas organizados em subdiretórios (ex: `src/app/panels/`).
-
-### Navegação e Parâmetros
-
-Ao realizar a exclusão ou edição de um item que possua parâmetros dinâmicos (como `id`), prefira utilizar `router.replace` ao retornar para a lista principal ou tela anterior. Isso garante que a rota antiga seja removida da pilha de navegação, limpando os parâmetros do contexto global e evitando que o usuário retorne a um recurso inexistente via botão "voltar".
-
-### Estrutura de Pastas e Componentes
-- **src/app/**: Contém estritamente arquivos de rota (páginas). Cada arquivo deve ter um `export default`.
-- **src/components/**: Pasta central para componentes reutilizáveis.
-  - **src/components/panel-components/**: Componentes específicos da funcionalidade de painéis (ex: `Panels`, `BottomBar`).
-- **Importante**: Nunca mantenha pastas de componentes dentro de `src/app` (mesmo com o prefixo `_`), para evitar que o Expo Router emita avisos de "missing default export" no terminal e para manter uma separação clara entre lógica de navegação e componentes visuais.
-
-## Estilização e Layout
-
-- **Espaçamento:** Utilize as constantes em `src/constants/spacing.ts`.
-- **Layout de Cards:** Para listas de itens, prefira o padrão de cards com a cor `surface`, bordas arredondadas (12-16px) e sombras leves.
-- **SafeArea:** Evite o uso de `SafeAreaView` global se estiver usando um Header customizado que já gerencia o topo da tela.
-
-## Gerenciamento de Estado e Performance
-
-### Estabilidade de Referências
-
-Ao criar Providers, sempre utilize `useMemo` para o valor do contexto e `useCallback` para as funções. Isso evita renderizações desnecessárias e loops infinitos em componentes que utilizam `useEffect` com essas funções como dependência.
-
-### Atualização de Listas (FlatList)
-
-Para garantir que o `FlatList` reflita mudanças em objetos complexos ou arrays gerenciados por formulários (React Hook Form):
-
-- Utilize `watch()` ou `useWatch()` para obter os dados em tempo real.
-- Utilize a prop `extraData` passando o próprio array de dados para forçar a re-renderização quando houver mudanças internas nos itens.
-
-### Persistência de Dados
-
-O carregamento inicial de dados (ex: via AsyncStorage) deve ser feito em um `useEffect` com dependências estáveis. Evite incluir objetos de métodos (como os retornados por `useFieldArray`) diretamente nas dependências se eles não forem estáveis.
+## 🛠️ Ferramentas
+- **Expo Router:** Navegação baseada em arquivos.
+- **React Hook Form + Zod:** Gerenciamento e validação de formulários.
+- **Lucide / Entypo / Ionicons:** Conjunto de ícones via `@expo/vector-icons`.

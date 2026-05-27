@@ -1,20 +1,12 @@
 export type ColorFieldsType = {
   primary: string;
   secondary: string;
-  background: string;
-  surface: string;
-  surfaceSecondary: string;
-  textPrimary: string;
-  textSecondary: string;
-  textOnPrimary: string;
-  success: string;
-  warning: string;
-  error: string;
+  bg: string;
+  bgModal: string;
+  text: string;
   border: string;
-  white: string;
-  black: string;
-  transparent: string;
 };
+
 export type ColorsType = {
   dark: ColorFieldsType;
   light: ColorFieldsType;
@@ -22,47 +14,19 @@ export type ColorsType = {
 
 export const color: ColorsType = {
   dark: {
-    primary: "#3b82f6",
-    secondary: "#a855f7",
-
-    background: "#0f172a",
-    surface: "#1e293b",
-    surfaceSecondary: "#334155",
-
-    textPrimary: "#f8fafc",
-    textSecondary: "#94a3b8",
-    textOnPrimary: "#ffffff",
-
-    success: "#22c55e",
-    warning: "#eab308",
-    error: "#ef4444",
-
-    border: "#334155",
-
-    white: "#ffffff",
-    black: "#000000",
-    transparent: "rgba(0,0,0,0.5)",
+    primary: "#6366f1", // Indigo
+    secondary: "#ec4899", // Pink
+    bg: "#0f172a", // Slate 900
+    bgModal: "#45556C", // Slate 500
+    text: "#f8fafc", // Slate 50
+    border: "#1e293b", // Slate 800,
   },
   light: {
-    primary: "#3b82f6",
-    secondary: "#a855f7",
-
-    background: "#f8fafc",
-    surface: "#ffffff",
-    surfaceSecondary: "#f1f5f9",
-
-    textPrimary: "#0f172a",
-    textSecondary: "#64748b",
-    textOnPrimary: "#ffffff",
-
-    success: "#22c55e",
-    warning: "#eab308",
-    error: "#ef4444",
-
-    border: "#e2e8f0",
-
-    white: "#ffffff",
-    black: "#000000",
-    transparent: "rgba(0,0,0,0.5)",
+    primary: "#4f46e5", // Indigo 600
+    secondary: "#db2777", // Pink 600
+    bg: "#ffffff",
+    bgModal: "#D4D4D8", // Zink 400
+    text: "#0f172a", // Slate 900
+    border: "#e2e8f0", // Slate 200,
   },
 };

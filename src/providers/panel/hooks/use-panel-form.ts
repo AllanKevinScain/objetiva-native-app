@@ -10,6 +10,7 @@ export function usePanelForm() {
       title: "",
       color: "",
       id: undefined,
+      tasks: [],
     }),
     [],
   );

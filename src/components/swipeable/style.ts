@@ -3,7 +3,6 @@ import { Dimensions, StyleSheet } from "react-native";
 
 export const style = StyleSheet.create({
   actions: {
-    width: "100%",
     height: Dimensions.get("window").height / 10,
     flexDirection: "row",
     justifyContent: "flex-end",

@@ -4,8 +4,8 @@ import { TextApp } from "@/components/text-app";
 import { TextfieldRHF } from "@/components/text-field-rhf";
 import { TouchableOpacityApp } from "@/components/touchableopacity-app";
 import { theme } from "@/constants/theme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import type { ModalType } from "@/hooks/use-modal-type";
-import { useThemeColor } from "@/hooks/use-theme-color";
 import type { PanelSchemaInfertype } from "@/schemas";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useFormContext } from "react-hook-form";
@@ -23,15 +23,14 @@ export function PanelModal(props: PanelModalProps) {
   const { visible, modalType, onRequestClose, onSubmit } = props;
 
   const { control, handleSubmit } = useFormContext<PanelSchemaInfertype>();
-  const textSecondary = useThemeColor({}, "textSecondary");
-  const black = useThemeColor({}, "black");
+  const { colors, font } = useAppTheme();
 
   return (
     <Dialog
       visible={visible}
       onRequestClose={onRequestClose}
       heightContainerModal={Dimensions.get("window").height / 1.5}>
-      <TextApp type="subtitle" style={[style.title, { color: black }]}>
+      <TextApp type="subtitle" style={[style.title, { color: colors.text, fontFamily: font.bold }]}>
         {modalType === "create" ? "Novo" : "Editar"} quadro de tarefas
       </TextApp>
 
@@ -43,7 +42,8 @@ export function PanelModal(props: PanelModalProps) {
           labelStyle={[
             style.inputLabel,
             {
-              color: textSecondary,
+              color: colors.text,
+              fontFamily: font.medium,
             },
           ]}
           placeholder="Digite o título da tarefa"
@@ -55,11 +55,11 @@ export function PanelModal(props: PanelModalProps) {
         <TouchableOpacityApp
           variant="ghost"
           onPress={onRequestClose}
-          style={{ borderRadius: theme.spacing.borderRadius.lg }}>
-          <MaterialIcons name="close" size={30} color={black} />
+          style={{ borderRadius: theme.spacing.borderRadius.lg, borderColor: colors.border }}>
+          <MaterialIcons name="close" size={30} color={colors.text} />
         </TouchableOpacityApp>
         <TouchableOpacityApp onPress={handleSubmit(onSubmit)} style={{ borderRadius: theme.spacing.borderRadius.lg }}>
-          <Entypo name="check" size={30} color={black} />
+          <Entypo name="check" size={30} color={colors.text} />
         </TouchableOpacityApp>
       </View>
     </Dialog>

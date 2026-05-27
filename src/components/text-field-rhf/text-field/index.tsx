@@ -1,5 +1,5 @@
 import { theme } from "@/constants/theme";
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import type { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import type { ComponentProps, ElementType } from "react";
@@ -51,11 +51,7 @@ export function Textfield(props: TextFieldProps) {
     secureTextEntry,
     ...restInputProps
   } = props;
-  const textSecondary = useThemeColor({}, "textSecondary");
-  const textPrimary = useThemeColor({}, "textPrimary");
-  const error = useThemeColor({}, "error");
-  const border = useThemeColor({}, "border");
-  const surface = useThemeColor({}, "surface");
+  const { colors, font } = useAppTheme();
 
   const [showPass, setShowPass] = useState(true);
 
@@ -67,17 +63,17 @@ export function Textfield(props: TextFieldProps) {
 
   return (
     <View style={style.container}>
-      {label && <Text style={[style.inputLabel, { color: textSecondary }, labelStyle]}>{label}</Text>}
+      {label && <Text style={[style.inputLabel, { color: colors.text, fontFamily: font.medium }, labelStyle]}>{label}</Text>}
       <View
         style={[
           style.inputBox,
-          { borderColor: border, backgroundColor: surface },
-          !!messageError && { borderColor: error },
+          { borderColor: colors.border, backgroundColor: colors.bg },
+          !!messageError && { borderColor: colors.secondary },
           containerStyle,
         ]}>
         {IconLeft && iconLeftName && (
           <TouchableOpacity onPress={iconPress} disabled={!iconPress} style={{ marginRight: theme.spacing.sizes.sm }}>
-            <IconLeft name={iconLeftName} size={20} color={textSecondary} />
+            <IconLeft name={iconLeftName} size={20} color={colors.text} />
           </TouchableOpacity>
         )}
 
@@ -85,26 +81,27 @@ export function Textfield(props: TextFieldProps) {
           style={[
             style.input,
             {
-              color: textPrimary,
+              color: colors.text,
+              fontFamily: font.regular,
             },
             inputStyle,
           ]}
           value={value}
           onChangeText={onChangeText}
-          placeholderTextColor={textSecondary}
+          placeholderTextColor={colors.text}
           secureTextEntry={isPasswordField ? showPass : secureTextEntry}
           {...restInputProps}
         />
 
         {isPasswordField && (
           <TouchableOpacity onPress={togglePass} style={{ marginLeft: theme.spacing.sizes.sm }}>
-            <Octicons name={showPass ? "eye-closed" : "eye"} size={20} color={textSecondary} />
+            <Octicons name={showPass ? "eye-closed" : "eye"} size={20} color={colors.text} />
           </TouchableOpacity>
         )}
 
         {IconRight && iconRightName && !isPasswordField && (
           <TouchableOpacity onPress={iconPress} style={{ marginLeft: theme.spacing.sizes.sm }}>
-            <IconRight name={iconRightName} size={20} color={textSecondary} />
+            <IconRight name={iconRightName} size={20} color={colors.text} />
           </TouchableOpacity>
         )}
       </View>
@@ -113,7 +110,8 @@ export function Textfield(props: TextFieldProps) {
           style={[
             style.error,
             {
-              color: error,
+              color: colors.secondary,
+              fontFamily: font.regular,
             },
           ]}>
           {messageError}

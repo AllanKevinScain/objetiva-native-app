@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Text, View } from "react-native";
 import { TouchableOpacityApp } from "../touchableopacity-app";
 import { style } from "./style";
@@ -11,7 +11,8 @@ interface EmptyListProps {
 
 export function EmptyList(props: EmptyListProps) {
   const { message = "Essa lista está vazia.", buttonContent, onButtonPress } = props;
-  const textPrimary = useThemeColor({}, "textPrimary");
+  const { colors } = useAppTheme();
+  const textPrimary = colors.text;
 
   return (
     <View style={style.container}>

@@ -1,6 +1,14 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Dimensions, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, TouchableOpacity } from "react-native";
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { style } from "./style";
 
 interface DialogProps {
@@ -12,9 +20,9 @@ interface DialogProps {
 
 export function Dialog(props: DialogProps) {
   const { visible, onRequestClose, children, heightContainerModal } = props;
-  const black = useThemeColor({}, "black");
-  const white = useThemeColor({}, "white");
-  const transparent = useThemeColor({}, "transparent");
+  const { colors } = useAppTheme();
+  const black = colors.bg;
+  const transparent = "rgba(0,0,0,0)";
 
   const height = heightContainerModal ? heightContainerModal : Dimensions.get("window").height / 2;
 
@@ -22,11 +30,7 @@ export function Dialog(props: DialogProps) {
     <Modal visible={visible} onRequestClose={onRequestClose} animationType="fade" transparent>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
         <Pressable style={[style.container, { backgroundColor: transparent }]} onPress={onRequestClose}>
-          <Pressable
-            style={[style.modalContent, { height, backgroundColor: white }]}
-            onPress={(e) => {
-              // Previne que o clique no conteúdo feche o modal
-            }}>
+          <Pressable style={[style.modalContent, { height, backgroundColor: colors.bgModal }]}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={style.scrollContent}>
               {children}
             </ScrollView>

@@ -24,7 +24,17 @@ export function PanelProvider({ children }: ProvidersProps) {
     async (value: PanelSchemaInfertype) => {
       try {
         if (modalType === "create") {
-          const newData = { ...value, id: Crypto.randomUUID() };
+          const newData: PanelSchemaInfertype = {
+            ...value,
+            id: Crypto.randomUUID(),
+            tasks: [
+              {
+                description: "",
+                selected: false,
+                id: Crypto.randomUUID(),
+              },
+            ],
+          };
           await addPanel(newData);
           fieldArrayPanelsMethods.append(newData);
         }

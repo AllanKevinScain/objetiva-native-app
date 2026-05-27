@@ -1,15 +1,16 @@
-import { theme } from "@/constants/theme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { useEffect } from "react";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 
 interface SkeletonProps {
-  width?: number;
+  width?: number | string;
   height?: number;
   radius?: number;
 }
 
 export function Skeleton(props: SkeletonProps) {
-  const { width = "100%", height = 20, radius = theme.spacing.borderRadius.sm } = props;
+  const { colors, spacing } = useAppTheme();
+  const { width = "100%", height = 20, radius = spacing.borderRadius.sm } = props;
 
   const opacity = useSharedValue(0.3);
 
@@ -34,10 +35,10 @@ export function Skeleton(props: SkeletonProps) {
     <Animated.View
       style={[
         {
-          width,
+          width: width as any,
           height,
           borderRadius: radius,
-          backgroundColor: theme.color.dark.surface,
+          backgroundColor: colors.border,
         },
         animatedStyle,
       ]}

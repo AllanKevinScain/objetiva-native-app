@@ -3,51 +3,55 @@ import { PANELS_TABLE_NAME } from "@/constants/async-tables";
 import { useAsyncStorage } from "@/hooks/use-async-storage";
 import { usePanel } from "@/providers/panel";
 import type { PanelSchemaInfertype } from "@/schemas";
-import { useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
 import { useWatch } from "react-hook-form";
 import { FlatList } from "react-native";
-import type { StructureModeType } from "./choose-structure-mode";
 import { PanelItem } from "./panel-item";
 
-interface PanelsProps {
-  structureMode: StructureModeType;
-}
-
-export function Panels(props: PanelsProps) {
-  const { structureMode } = props;
+export function Panels() {
   const { panelsMethods, updatePanelModalType, handlePanelModal, fieldArrayPanelsMethods } = usePanel();
   const { getData } = useAsyncStorage();
   const { replace } = fieldArrayPanelsMethods;
+
+  const [isRefreshing, setRefresh] = useState(true);
 
   const fields = useWatch({ control: panelsMethods.control, name: "panels" });
 
   const { push } = useRouter();
 
-  useEffect(() => {
-    async function load() {
-      const items = (await getData(PANELS_TABLE_NAME)) as PanelSchemaInfertype[];
+  const load = useCallback(async () => {
+    setRefresh(true);
 
-      if (!items?.length) return replace([]);
-      else replace(items);
+    const items = (await getData(PANELS_TABLE_NAME)) as PanelSchemaInfertype[];
+
+    if (!items?.length) {
+      replace([]);
+    } else {
+      replace(items);
     }
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    setRefresh(false);
+  }, [getData, replace]);
+
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [load]),
+  );
 
   return (
     <FlatList
-      key={structureMode}
       data={fields}
       keyExtractor={(item, index) => item.id || index.toString()}
-      {...(structureMode === "grid" && { numColumns: 2, columnWrapperStyle: { gap: 14 } })}
-      renderItem={({ item }) => (
+      contentContainerStyle={{ paddingBottom: 80 }}
+      renderItem={({ item, index }) => (
         <PanelItem
           {...item}
           onPress={() => {
             push({
               pathname: "/panels/(board)/[id]",
-              params: { id: item.id!, title: item.title },
+              params: { id: item.id!, title: item.title, index: index },
             });
           }}
         />
@@ -61,6 +65,8 @@ export function Panels(props: PanelsProps) {
           }}
         />
       )}
+      refreshing={isRefreshing}
+      onRefresh={load}
     />
   );
 }

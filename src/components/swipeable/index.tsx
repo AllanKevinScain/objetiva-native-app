@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import React from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 import { TouchableOpacity, View } from "react-native";
@@ -15,9 +15,7 @@ interface SwipeableProps {
 
 export function Swipeable(props: SwipeableProps) {
   const { children, styleContainer, onRemove, onUpdated } = props;
-  const border = useThemeColor({}, "border");
-  const error = useThemeColor({}, "error");
-  const primary = useThemeColor({}, "primary");
+  const { colors } = useAppTheme();
 
   const translateX = useSharedValue(0);
   const ACTION_WIDTH = 190;
@@ -42,14 +40,14 @@ export function Swipeable(props: SwipeableProps) {
         style={[
           style.actions,
           {
-            backgroundColor: border,
+            backgroundColor: colors.border,
           },
         ]}>
         <TouchableOpacityApp
           style={[
             style.removeButton,
             {
-              backgroundColor: error,
+              backgroundColor: colors.secondary,
             },
           ]}
           variant="primary"
@@ -63,7 +61,7 @@ export function Swipeable(props: SwipeableProps) {
           style={[
             style.updatedButton,
             {
-              backgroundColor: primary,
+              backgroundColor: colors.primary,
             },
           ]}
           variant="secondary"

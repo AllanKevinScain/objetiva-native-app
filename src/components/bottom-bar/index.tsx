@@ -1,6 +1,6 @@
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Entypo } from "@expo/vector-icons";
-import { Dimensions, TouchableOpacity, View } from "react-native";
+import { Dimensions, Platform, TouchableOpacity, View } from "react-native";
 
 interface BottomBarProps {
   onMiddleIconPress: () => void;
@@ -8,12 +8,7 @@ interface BottomBarProps {
 
 export function BottomBar(props: BottomBarProps) {
   const { onMiddleIconPress } = props;
-
-  const black = useThemeColor({}, "black");
-  const border = useThemeColor({}, "border");
-  const background = useThemeColor({}, "background");
-  const primary = useThemeColor({}, "primary");
-  const white = useThemeColor({}, "white");
+  const { colors } = useAppTheme();
 
   return (
     <View
@@ -22,39 +17,41 @@ export function BottomBar(props: BottomBarProps) {
         bottom: 0,
         left: 0,
         width: Dimensions.get("window").width,
+        height: Platform.OS === "ios" ? 90 : 70,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-around",
-        paddingTop: 20,
-        shadowColor: black,
+        backgroundColor: colors.bg,
         borderTopWidth: 1,
-        borderTopColor: border,
-        backgroundColor: background,
+        borderTopColor: colors.border,
+        
+        // Shadow
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: -4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 20,
       }}>
       <TouchableOpacity
+        activeOpacity={0.8}
         onPress={onMiddleIconPress}
         style={{
           alignItems: "center",
           justifyContent: "center",
-          height: 60,
-          width: 60,
-          borderRadius: 40,
-          zIndex: 50,
+          height: 64,
+          width: 64,
+          borderRadius: 32,
+          backgroundColor: colors.primary,
+          top: -30,
+          
+          // Button Shadow
+          shadowColor: colors.primary,
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.4,
+          shadowRadius: 8,
+          elevation: 8,
         }}>
-        <View
-          style={[
-            {
-              alignItems: "center",
-              justifyContent: "center",
-              height: 70,
-              width: 70,
-              borderRadius: 40,
-              top: -30,
-            },
-            { backgroundColor: primary },
-          ]}>
-          <Entypo name="plus" size={40} color={white} />
-        </View>
+        <Entypo name="plus" size={32} color={colors.text} />
       </TouchableOpacity>
     </View>
   );
