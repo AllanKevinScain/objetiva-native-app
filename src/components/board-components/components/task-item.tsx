@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import type { PanelsSchemaInfertype } from "@/schemas";
 import { style } from "../style";
-import { Checkbox } from "./checkbox";
+import { CheckTask } from "./check-item";
 import { InputTask } from "./input-task";
 
 export interface TaskItemProps {
@@ -18,7 +18,7 @@ export function TaskItem(props: TaskItemProps) {
 
   return (
     <View style={style.container}>
-      <Checkbox taskId={taskId} panelIndex={panelIndex} taskIndex={taskIndex} tasksArrayMethods={tasksArrayMethods} />
+      <CheckTask taskId={taskId} panelIndex={panelIndex} taskIndex={taskIndex} tasksArrayMethods={tasksArrayMethods} />
 
       <InputTask taskId={taskId} panelIndex={panelIndex} taskIndex={taskIndex} tasksArrayMethods={tasksArrayMethods} />
     </View>

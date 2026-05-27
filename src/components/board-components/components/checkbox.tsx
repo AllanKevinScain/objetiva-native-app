@@ -1,28 +1,21 @@
-import { usePanel } from "@/providers/panel";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useWatch } from "react-hook-form";
 import { TouchableOpacity, View } from "react-native";
 
 import { useAppTheme } from "@/hooks/use-app-theme";
-import { useTaskList } from "../hooks/use-task-list";
 import { style } from "../style";
-import type { TaskItemProps } from "./task-item";
+interface CheckboxProps {
+  handleCheck: () => void;
+  selected: boolean;
+  icon?: "check" | "check-double";
+}
 
-export function Checkbox(props: TaskItemProps) {
-  const { taskId, panelIndex, taskIndex, tasksArrayMethods } = props;
+export function Checkbox(props: CheckboxProps) {
+  const { handleCheck, selected, icon = "check" } = props;
 
   const { colors } = useAppTheme();
-  const { panelsMethods } = usePanel();
-
-  const tasks = useWatch({ control: panelsMethods.control, name: `panels.${panelIndex}.tasks` });
-  const selected = useWatch({
-    control: panelsMethods.control,
-    name: `panels.${panelIndex}.tasks.${taskIndex}.selected`,
-  });
-  const { handleCheck } = useTaskList(tasks, tasksArrayMethods);
 
   return (
-    <TouchableOpacity onPress={() => handleCheck({ panelIndex, taskId })}>
+    <TouchableOpacity onPress={handleCheck}>
       <View
         style={[
           style.containerBall,
@@ -35,7 +28,7 @@ export function Checkbox(props: TaskItemProps) {
                 borderColor: "white",
               },
         ]}>
-        {selected && <FontAwesome5 name="check" color="white" size={18} />}
+        {selected && <FontAwesome5 name={icon} color="white" size={18} />}
       </View>
     </TouchableOpacity>
   );
