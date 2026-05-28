@@ -1,6 +1,6 @@
+import { HeaderBoardStack } from "@/components/board-components/header-board-stack";
 import { theme } from "@/constants/theme";
 import { useAsyncStorage } from "@/hooks/use-async-storage";
-import { BoardProvider, useBoard } from "@/providers/board";
 import { PanelProvider, usePanel } from "@/providers/panel";
 import {
   Roboto_400Regular,
@@ -9,7 +9,7 @@ import {
   Roboto_900Black,
   useFonts,
 } from "@expo-google-fonts/roboto";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { DarkTheme, DefaultTheme, ThemeProvider, useTheme } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -46,7 +46,6 @@ const AppLightTheme = {
 };
 
 function NavigationPage() {
-  const { handleActionsModal } = useBoard();
   const { fieldArrayPanelsMethods } = usePanel();
   const { clearAll } = useAsyncStorage();
   const { colors } = useTheme();
@@ -97,15 +96,11 @@ function NavigationPage() {
       <Stack.Screen
         name="panels/(board)/[id]"
         options={({ route }) => {
-          const typedParam = route.params as { title: string };
+          const typedParam = route.params as { title: string; id: string };
           return {
             title: typedParam?.title || route.name,
             animation: "slide_from_right",
-            headerRight: () => (
-              <TouchableOpacity style={{ padding: 5 }} onPress={handleActionsModal}>
-                <FontAwesome5 name="ellipsis-v" size={20} color={colors.primary} />
-              </TouchableOpacity>
-            ),
+            headerRight: () => <HeaderBoardStack currentPageId={typedParam.id} />,
           };
         }}
       />
@@ -135,16 +130,13 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? AppDarkTheme : AppLightTheme}>
       <PanelProvider>
-        <BoardProvider>
-          <SafeAreaView
-            style={{
-              flex: 1,
-              backgroundColor:
-                colorScheme === "dark" ? AppDarkTheme.colors.background : AppLightTheme.colors.background,
-            }}>
-            <NavigationPage />
-          </SafeAreaView>
-        </BoardProvider>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            backgroundColor: colorScheme === "dark" ? AppDarkTheme.colors.background : AppLightTheme.colors.background,
+          }}>
+          <NavigationPage />
+        </SafeAreaView>
         <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
       </PanelProvider>
     </ThemeProvider>
