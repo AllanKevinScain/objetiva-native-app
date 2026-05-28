@@ -9,7 +9,7 @@ interface PanelItemProps extends Omit<PanelSchemaInfertype, "id"> {
 
 export function PanelItem(props: PanelItemProps) {
   const { title, color, onPress } = props;
-  const { colors, font, spacing } = useAppTheme();
+  const { colors } = useAppTheme();
 
   return (
     <TouchableOpacity
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     overflow: "hidden",
-    
+
     // Shadow for iOS
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
