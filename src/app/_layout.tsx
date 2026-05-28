@@ -1,7 +1,6 @@
-import { HeaderBoardStack } from "@/components/board-components/header-board-stack";
+import { NavigationPage } from "@/components/app-components";
 import { theme } from "@/constants/theme";
-import { useAsyncStorage } from "@/hooks/use-async-storage";
-import { PanelProvider, usePanel } from "@/providers/panel";
+import { PanelProvider } from "@/providers/panel";
 import {
   Roboto_400Regular,
   Roboto_500Medium,
@@ -9,13 +8,11 @@ import {
   Roboto_900Black,
   useFonts,
 } from "@expo-google-fonts/roboto";
-import { Ionicons } from "@expo/vector-icons";
-import { DarkTheme, DefaultTheme, ThemeProvider, useTheme } from "@react-navigation/native";
-import { Stack } from "expo-router";
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { Alert, TouchableOpacity, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -44,69 +41,6 @@ const AppLightTheme = {
     primary: theme.color.light.primary,
   },
 };
-
-function NavigationPage() {
-  const { fieldArrayPanelsMethods } = usePanel();
-  const { clearAll } = useAsyncStorage();
-  const { colors } = useTheme();
-
-  async function clearAllData() {
-    await clearAll();
-    fieldArrayPanelsMethods.replace([]);
-  }
-
-  return (
-    <Stack
-      screenOptions={{
-        headerTitleStyle: {
-          color: colors.text,
-          fontFamily: theme.font.bold,
-        },
-        headerStyle: {
-          backgroundColor: colors.card,
-        },
-        headerShadowVisible: false,
-      }}>
-      <Stack.Screen name="index" />
-      <Stack.Screen
-        name="panels/index"
-        options={{
-          title: "Seja bem vindo!",
-          headerRight: () => (
-            <TouchableOpacity
-              style={{ padding: 5 }}
-              onPress={() => {
-                Alert.alert("Limpar memória", "Deseja remover todo seu progresso?", [
-                  {
-                    text: "Cancelar",
-                    style: "cancel",
-                  },
-                  {
-                    text: "Limpar",
-                    style: "default",
-                    onPress: clearAllData,
-                  },
-                ]);
-              }}>
-              <Ionicons name="trash" size={20} color={colors.primary} />
-            </TouchableOpacity>
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="panels/(board)/[id]"
-        options={({ route }) => {
-          const typedParam = route.params as { title: string; id: string };
-          return {
-            title: typedParam?.title || route.name,
-            animation: "slide_from_right",
-            headerRight: () => <HeaderBoardStack currentPageId={typedParam.id} />,
-          };
-        }}
-      />
-    </Stack>
-  );
-}
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

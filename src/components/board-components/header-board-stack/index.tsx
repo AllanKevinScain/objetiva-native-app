@@ -3,17 +3,30 @@ import { useAppTheme } from "@/hooks/use-app-theme";
 import { usePanelAsyncStorage } from "@/hooks/use-panel-async-storage";
 import { usePanel } from "@/providers/panel";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
+import { useEffect } from "react";
+import { useWatch } from "react-hook-form";
 import { Alert, TouchableOpacity, View } from "react-native";
 
 export function HeaderBoardStack(props: { currentPageId: string }) {
   const { currentPageId } = props;
 
+  const router = useRouter();
+  const navigation = useNavigation();
+
   const { panelsMethods, fieldArrayPanelsMethods, resetFormPanelValues, updatePanelModalType, handlePanelModal } =
     usePanel();
 
+  const panels = useWatch({ control: panelsMethods.control, name: "panels" });
+  const currentPanel = panels?.find((p) => p.id === currentPageId);
+
+  useEffect(() => {
+    if (currentPanel?.title) {
+      navigation.setOptions({ title: currentPanel.title });
+    }
+  }, [currentPanel?.title, navigation]);
+
   const { getPanel, removePanel } = usePanelAsyncStorage(PANELS_TABLE_NAME);
-  const router = useRouter();
   const { colors } = useAppTheme();
 
   async function handleRemovePanel() {
