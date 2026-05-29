@@ -13,8 +13,8 @@
     "format": "prettier --config .prettierrc.cjs --write \"src/**/*.ts\"",
     "doctor": "npx expo-doctor",
     "check-dep": "npx expo install --check",
-    "apk:apk": "eas build:configure && eas build -p android --profile preview",
-    "apk:aab": "eas build:configure && eas build -p android --profile production"
+    "apk": "eas build:configure && eas build -p android --profile preview",
+    "aab": "eas build:configure && eas build -p android --profile production"
   },
   "dependencies": {
     "@expo-google-fonts/roboto": "^0.4.3",

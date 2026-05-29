@@ -24,10 +24,12 @@ export function CheckAll(props: CheckAllProps) {
   const selectAll = useCallback(() => {
     if (isAllSelected) {
       setSelecteds(false);
-      tasks.forEach((task) => replace({ ...task, selected: false }));
+      const tasksWithSelectedFalse = tasks.map((task) => ({ ...task, selected: false }));
+      replace(tasksWithSelectedFalse);
     } else {
       setSelecteds(true);
-      tasks.forEach((task) => replace({ ...task, selected: true }));
+      const tasksWithSelectedTrue = tasks.map((task) => ({ ...task, selected: true }));
+      replace(tasksWithSelectedTrue);
     }
   }, [isAllSelected, replace, tasks]);
 

@@ -6,10 +6,11 @@ import { styles } from "./styles";
 
 interface PanelItemProps extends Omit<PanelSchemaInfertype, "id"> {
   onPress: () => void;
+  onLongPress: () => void;
 }
 
 export function PanelItem(props: PanelItemProps) {
-  const { title, color, onPress } = props;
+  const { title, color, onPress, onLongPress } = props;
   const { colors } = useAppTheme();
 
   return (
@@ -23,7 +24,8 @@ export function PanelItem(props: PanelItemProps) {
           shadowColor: "black",
         },
       ]}
-      onPress={onPress}>
+      onPress={onPress}
+      onLongPress={onLongPress}>
       <View style={[styles.marker, { backgroundColor: color }]} />
       <View style={styles.content}>
         <TextApp type="subtitle" style={styles.title}>
