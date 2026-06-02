@@ -25,7 +25,7 @@ export function Checkbox(props: CheckboxProps) {
                 borderColor: colors.border,
               }
             : {
-                borderColor: "white",
+                borderColor: colors.border,
               },
         ]}>
         {selected && <FontAwesome5 name={icon} color="white" size={18} />}

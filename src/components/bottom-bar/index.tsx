@@ -24,7 +24,7 @@ export function BottomBar(props: BottomBarProps) {
         backgroundColor: colors.bg,
         borderTopWidth: 1,
         borderTopColor: colors.border,
-        
+
         // Shadow
         shadowColor: "#000",
         shadowOffset: { width: 0, height: -4 },
@@ -43,7 +43,7 @@ export function BottomBar(props: BottomBarProps) {
           borderRadius: 32,
           backgroundColor: colors.primary,
           top: -30,
-          
+
           // Button Shadow
           shadowColor: colors.primary,
           shadowOffset: { width: 0, height: 4 },
@@ -51,7 +51,7 @@ export function BottomBar(props: BottomBarProps) {
           shadowRadius: 8,
           elevation: 8,
         }}>
-        <Entypo name="plus" size={32} color={colors.text} />
+        <Entypo name="plus" size={32} color="white" />
       </TouchableOpacity>
     </View>
   );

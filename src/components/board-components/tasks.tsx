@@ -1,8 +1,8 @@
 import { usePanel } from "@/providers/panel";
 import { useLocalSearchParams } from "expo-router";
 import { useFieldArray } from "react-hook-form";
-import { FlatList, View } from "react-native";
-
+import { View } from "react-native";
+import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 import { CheckAll } from "./components/check-all";
 import { TaskItem } from "./components/task-item";
 
@@ -19,9 +19,12 @@ export function Tasks() {
   });
 
   return (
-    <View style={{ gap: 20 }}>
+    <View style={{ flex: 1, gap: 20 }}>
       <CheckAll panelIndex={panelIndex} tasksArrayMethods={tasksArrayMethods} />
-      <FlatList
+
+      <KeyboardAwareFlatList
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
         data={tasksArrayMethods.fields}
         keyExtractor={(item, index) => item.id ?? String(index)}
         renderItem={({ item, index: taskIndex }) => (
@@ -32,7 +35,6 @@ export function Tasks() {
             tasksArrayMethods={tasksArrayMethods}
           />
         )}
-        contentContainerStyle={{ paddingBottom: 80 }}
       />
     </View>
   );
