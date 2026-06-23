@@ -1,6 +1,5 @@
 import { NavigationPage } from "@/components/app-components";
 import { theme } from "@/constants/theme";
-import { useDataMigration } from "@/hooks/use-data-migration";
 import { PanelProvider } from "@/providers/panel";
 import {
   Roboto_400Regular,
@@ -44,7 +43,6 @@ const AppLightTheme = {
 };
 
 export default function RootLayout() {
-  useDataMigration();
 
   const colorScheme = useColorScheme();
   const [loaded, error] = useFonts({

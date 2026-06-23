@@ -1,4 +1,6 @@
 import type { UseFieldArrayReturn } from "react-hook-form";
+import type { Ref } from "react";
+import type { TextInput } from "react-native";
 import { View } from "react-native";
 
 import type { PanelsSchemaInfertype } from "@/schemas";
@@ -11,16 +13,27 @@ export interface TaskItemProps {
   taskIndex: number;
   panelIndex: number;
   tasksArrayMethods: UseFieldArrayReturn<PanelsSchemaInfertype, `panels.${number}.tasks`, "key">;
+  onFocus?: () => void;
+  onRemove?: () => void;
+  inputRef?: Ref<TextInput>;
 }
 
 export function TaskItem(props: TaskItemProps) {
-  const { taskId, taskIndex, panelIndex, tasksArrayMethods } = props;
+  const { taskId, taskIndex, panelIndex, tasksArrayMethods, onFocus, onRemove, inputRef } = props;
 
   return (
     <View style={style.container}>
       <CheckTask taskId={taskId} panelIndex={panelIndex} taskIndex={taskIndex} tasksArrayMethods={tasksArrayMethods} />
 
-      <InputTask taskId={taskId} panelIndex={panelIndex} taskIndex={taskIndex} tasksArrayMethods={tasksArrayMethods} />
+      <InputTask
+        taskId={taskId}
+        panelIndex={panelIndex}
+        taskIndex={taskIndex}
+        tasksArrayMethods={tasksArrayMethods}
+        onFocus={onFocus}
+        onRemove={onRemove}
+        inputRef={inputRef}
+      />
     </View>
   );
 }

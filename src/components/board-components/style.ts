@@ -6,8 +6,8 @@ export const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 10,
-
     paddingHorizontal: 1,
+    paddingVertical: 4,
   },
   containerBall: {
     borderRadius: 6,

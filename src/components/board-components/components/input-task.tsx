@@ -9,7 +9,7 @@ import { useTaskList } from "../hooks/use-task-list";
 import type { TaskItemProps } from "./task-item";
 
 export function InputTask(props: TaskItemProps) {
-  const { taskId, taskIndex, panelIndex, tasksArrayMethods } = props;
+  const { taskId, taskIndex, panelIndex, tasksArrayMethods, onFocus, onRemove, inputRef } = props;
 
   const { colors, font } = useAppTheme();
   const { panelsMethods } = usePanel();
@@ -37,6 +37,7 @@ export function InputTask(props: TaskItemProps) {
       name={`panels.${panelIndex}.tasks.${taskIndex}.description`}
       render={({ field: { value, onChange } }) => (
         <TextInput
+          ref={inputRef}
           value={value ?? undefined}
           onChangeText={onChange}
           autoFocus={taskIndex === tasksArrayMethods.fields.length - 1}
@@ -53,13 +54,16 @@ export function InputTask(props: TaskItemProps) {
             textDecorationLine: selected ? "line-through" : "none",
           }}
           onSubmitEditing={newLine}
+          onFocus={onFocus}
           onBlur={() => editLine(taskId, value)}
-          onKeyPress={(e) =>
-            removeLine({
+          onKeyPress={async (e) => {
+            const wasRemoved = await removeLine({
               event: e,
               taskId,
-            })
-          }
+            });
+
+            if (wasRemoved) onRemove?.();
+          }}
         />
       )}
     />

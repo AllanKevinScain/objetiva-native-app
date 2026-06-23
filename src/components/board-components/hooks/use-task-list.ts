@@ -48,14 +48,18 @@ export function useTaskList(
   async function removeLine(props: { event: TextInputKeyPressEvent; taskId: string }) {
     const { event, taskId } = props;
     const taskIndex = tasks?.findIndex((task) => task.id === taskId);
-    if (taskIndex === -1 || taskIndex === undefined || fields.length === 1) return;
+    if (taskIndex === -1 || taskIndex === undefined || fields.length === 1) return false;
 
     const currentTask = tasks?.[taskIndex];
 
     if (event.nativeEvent.key === "Backspace" && currentTask?.description?.length === 0) {
       remove(taskIndex);
       await removeTask(panelId, currentTask.id!);
+
+      return true;
     }
+
+    return false;
   }
 
   async function handleCheck(props: { panelIndex: number; taskId: string }) {
