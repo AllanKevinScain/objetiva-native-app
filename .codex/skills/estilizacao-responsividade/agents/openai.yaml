@@ -1,0 +1,4 @@
+interface:
+  display_name: "Estilização e Responsividade"
+  short_description: "Layouts flexíveis para React Native"
+  default_prompt: "Use $estilizacao-responsividade para criar ou revisar layouts responsivos em React Native."

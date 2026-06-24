@@ -1,0 +1,4 @@
+interface:
+  display_name: "Navegação Fluida"
+  short_description: "Fluxos com Expo Router ou React Navigation"
+  default_prompt: "Use $navegacao-fluida para estruturar navegação, autenticação, tabs e stacks em React Native."

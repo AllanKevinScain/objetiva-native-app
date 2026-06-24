@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deploy e CI/CD"
+  short_description: "Esteiras com Actions, Bitrise e EAS"
+  default_prompt: "Use $deploy-ci-cd para configurar testes, builds e distribuição contínua do app."

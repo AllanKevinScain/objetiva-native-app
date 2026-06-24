@@ -1,0 +1,4 @@
+interface:
+  display_name: "Código Nativo Mínimo"
+  short_description: "AndroidManifest, Info.plist, Gradle e Pods"
+  default_prompt: "Use $codigo-nativo-minimo para investigar ou ajustar configurações nativas Android e iOS em React Native."

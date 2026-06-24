@@ -1,0 +1,4 @@
+interface:
+  display_name: "Testes Automatizados"
+  short_description: "Jest e React Native Testing Library"
+  default_prompt: "Use $testes-automatizados para criar ou revisar testes Jest e React Native Testing Library."

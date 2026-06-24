@@ -1,0 +1,4 @@
+interface:
+  display_name: "Otimização de Performance"
+  short_description: "Renderização, memoização e listas longas"
+  default_prompt: "Use $otimizacao-performance para identificar e corrigir gargalos de performance em React Native."

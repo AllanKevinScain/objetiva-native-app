@@ -1,0 +1,4 @@
+interface:
+  display_name: "Consumo de APIs e Cache"
+  short_description: "APIs, cache e estados com TanStack Query"
+  default_prompt: "Use $consumo-apis-cache para implementar consumo de APIs, cache e estados de requisição no app."

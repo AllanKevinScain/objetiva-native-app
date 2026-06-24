@@ -1,0 +1,4 @@
+interface:
+  display_name: "Arquitetura e Clean Code"
+  short_description: "Organização escalável de projeto React Native"
+  default_prompt: "Use $arquitetura-clean-code para organizar features, componentes e dependências do projeto."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "TypeScript Avançado"
+  short_description: "Tipagem forte para React Native"
+  default_prompt: "Use $typescript-avancado para revisar e melhorar a tipagem de uma feature React Native."

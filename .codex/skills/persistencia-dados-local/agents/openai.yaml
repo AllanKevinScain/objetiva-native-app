@@ -1,0 +1,4 @@
+interface:
+  display_name: "Persistência de Dados Local"
+  short_description: "Armazenamento local com MMKV e AsyncStorage"
+  default_prompt: "Use $persistencia-dados-local para implementar ou revisar persistência local offline no app."

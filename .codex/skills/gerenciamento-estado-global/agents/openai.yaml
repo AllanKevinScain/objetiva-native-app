@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gerenciamento de Estado Global"
+  short_description: "Estado global com Zustand e Redux Toolkit"
+  default_prompt: "Use $gerenciamento-estado-global para desenhar ou revisar o estado compartilhado de um app React Native."

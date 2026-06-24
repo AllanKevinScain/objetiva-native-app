@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ecossistema Expo"
+  short_description: "Expo, Prebuild, EAS Build e Submit"
+  default_prompt: "Use $ecossistema-expo para configurar ou revisar Expo, Prebuild, EAS Build e EAS Submit."

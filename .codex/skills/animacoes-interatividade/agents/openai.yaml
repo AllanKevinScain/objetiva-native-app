@@ -1,0 +1,4 @@
+interface:
+  display_name: "Animações e Interatividade"
+  short_description: "Transições nativas com Animated e Reanimated"
+  default_prompt: "Use $animacoes-interatividade para implementar animações e interações fluidas no app React Native."
