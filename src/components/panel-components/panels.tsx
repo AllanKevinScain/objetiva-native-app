@@ -7,6 +7,7 @@ import type { PanelSchemaInfertype } from "@/schemas";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Alert, Dimensions, FlatList } from "react-native";
 import { PanelItem } from "./panel-item";
 
@@ -14,6 +15,7 @@ export function Panels() {
   const { panelsMethods, updatePanelModalType, handlePanelModal, fieldArrayPanelsMethods } = usePanel();
   const { getData } = useAsyncStorage();
   const { removePanel } = usePanelAsyncStorage(PANELS_TABLE_NAME);
+  const { t } = useTranslation();
   const { replace } = fieldArrayPanelsMethods;
 
   const [isRefreshing, setRefresh] = useState(true);
@@ -23,13 +25,13 @@ export function Panels() {
   const { push } = useRouter();
 
   async function handleRemovePanel(itemId: string) {
-    Alert.alert("Remover quadro", "Deseja remover este quadro?", [
+    Alert.alert(t("panels.removeTitle"), t("panels.removeMessage"), [
       {
-        text: "Cancelar",
+        text: t("common.cancel"),
         style: "cancel",
       },
       {
-        text: "Remover",
+        text: t("common.remove"),
         onPress: async () => {
           if (itemId) {
             const panels = panelsMethods.getValues("panels");
@@ -41,7 +43,7 @@ export function Panels() {
               await removePanel(itemId);
             }
           } else {
-            Alert.alert("Erro", "Painel não encontrado");
+            Alert.alert(t("common.error"), t("panels.notFound"));
           }
         },
       },
@@ -87,7 +89,7 @@ export function Panels() {
       )}
       ListEmptyComponent={() => (
         <EmptyList
-          buttonContent="Adicionar quadro de tarefas"
+          buttonContent={t("panels.add")}
           onButtonPress={() => {
             updatePanelModalType("create");
             handlePanelModal();

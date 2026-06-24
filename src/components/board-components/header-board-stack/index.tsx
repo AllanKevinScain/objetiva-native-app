@@ -6,6 +6,7 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { useWatch } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Alert, TouchableOpacity, View } from "react-native";
 
 export function HeaderBoardStack(props: { currentPageId: string }) {
@@ -19,6 +20,7 @@ export function HeaderBoardStack(props: { currentPageId: string }) {
 
   const panels = useWatch({ control: panelsMethods.control, name: "panels" });
   const currentPanel = panels?.find((p) => p.id === currentPageId);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (currentPanel?.title) {
@@ -30,13 +32,13 @@ export function HeaderBoardStack(props: { currentPageId: string }) {
   const { colors } = useAppTheme();
 
   async function handleRemovePanel() {
-    Alert.alert("Remover quadro", "Deseja remover este quadro?", [
+    Alert.alert(t("panels.removeTitle"), t("panels.removeMessage"), [
       {
-        text: "Cancelar",
+        text: t("common.cancel"),
         style: "cancel",
       },
       {
-        text: "Remover",
+        text: t("common.remove"),
         onPress: async () => {
           if (currentPageId) {
             const panels = panelsMethods.getValues("panels");
@@ -50,7 +52,7 @@ export function HeaderBoardStack(props: { currentPageId: string }) {
 
             router.replace("/panels");
           } else {
-            Alert.alert("Erro", "Painel não encontrado");
+            Alert.alert(t("common.error"), t("panels.notFound"));
           }
         },
       },
@@ -64,7 +66,7 @@ export function HeaderBoardStack(props: { currentPageId: string }) {
       updatePanelModalType("edit");
       handlePanelModal();
     } else {
-      Alert.alert("Erro", "Painel não encontrado");
+      Alert.alert(t("common.error"), t("panels.notFound"));
     }
   }
 

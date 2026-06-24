@@ -9,6 +9,7 @@ import type { ModalType } from "@/hooks/use-modal-type";
 import type { PanelSchemaInfertype } from "@/schemas";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Dimensions, View } from "react-native";
 import { style } from "./style";
 
@@ -24,6 +25,7 @@ export function PanelModal(props: PanelModalProps) {
 
   const { control, handleSubmit } = useFormContext<PanelSchemaInfertype>();
   const { colors, font } = useAppTheme();
+  const { t } = useTranslation();
 
   return (
     <Dialog
@@ -31,14 +33,14 @@ export function PanelModal(props: PanelModalProps) {
       onRequestClose={onRequestClose}
       heightContainerModal={Dimensions.get("window").height / 1.5}>
       <TextApp type="subtitle" style={[style.title, { color: colors.text, fontFamily: font.bold }]}>
-        {modalType === "create" ? "Novo" : "Editar"} quadro de tarefas
+        {t(modalType === "create" ? "panelModal.createTitle" : "panelModal.editTitle")}
       </TextApp>
 
       <View style={style.formContainer}>
         <TextfieldRHF
           control={control}
           name="title"
-          label="Título:"
+          label={t("panelModal.titleLabel")}
           labelStyle={[
             style.inputLabel,
             {
@@ -46,7 +48,7 @@ export function PanelModal(props: PanelModalProps) {
               fontFamily: font.medium,
             },
           ]}
-          placeholder="Digite o título da tarefa"
+          placeholder={t("panelModal.titlePlaceholder")}
         />
         <ColorpickerRHF control={control} name="color" />
       </View>

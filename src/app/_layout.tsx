@@ -1,5 +1,6 @@
 import { NavigationPage } from "@/components/app-components";
 import { theme } from "@/constants/theme";
+import { syncLanguageWithDevice } from "@/i18n";
 import { PanelProvider } from "@/providers/panel";
 import {
   Roboto_400Regular,
@@ -12,7 +13,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { AppState, useColorScheme } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -43,7 +44,6 @@ const AppLightTheme = {
 };
 
 export default function RootLayout() {
-
   const colorScheme = useColorScheme();
   const [loaded, error] = useFonts({
     Roboto_400Regular,
@@ -57,6 +57,16 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded, error]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (state) => {
+      if (state === "active") {
+        syncLanguageWithDevice();
+      }
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   if (!loaded && !error) {
     return null;

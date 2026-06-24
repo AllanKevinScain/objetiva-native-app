@@ -1,4 +1,5 @@
 import { useAppTheme } from "@/hooks/use-app-theme";
+import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 import { TouchableOpacityApp } from "../touchableopacity-app";
 import { style } from "./style";
@@ -10,7 +11,8 @@ interface EmptyListProps {
 }
 
 export function EmptyList(props: EmptyListProps) {
-  const { message = "Essa lista está vazia.", buttonContent, onButtonPress } = props;
+  const { t } = useTranslation();
+  const { message = t("emptyList.message"), buttonContent, onButtonPress } = props;
   const { colors } = useAppTheme();
   const textPrimary = colors.text;
 
