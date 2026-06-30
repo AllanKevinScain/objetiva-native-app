@@ -2,7 +2,7 @@
   "expo": {
     "name": "objetiva",
     "slug": "objetiva",
-    "version": "11",
+    "version": "14",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "objetiva",
@@ -18,7 +18,7 @@
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.allankevinscain.objetiva",
-      "versionCode": 11
+      "versionCode": 14
     },
     "web": {
       "output": "static",

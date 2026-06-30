@@ -9,7 +9,7 @@ import { useTaskList } from "../hooks/use-task-list";
 import type { TaskItemProps } from "./task-item";
 
 export function InputTask(props: TaskItemProps) {
-  const { taskId, taskIndex, panelIndex, tasksArrayMethods, onFocus, onRemove, inputRef } = props;
+  const { taskId, taskIndex, panelIndex, tasksArrayMethods, onFocus, onRemove, onSubmitTask, inputRef } = props;
 
   const { colors, font } = useAppTheme();
   const { panelsMethods } = usePanel();
@@ -40,7 +40,6 @@ export function InputTask(props: TaskItemProps) {
           ref={inputRef}
           value={value ?? undefined}
           onChangeText={onChange}
-          autoFocus={taskIndex === tasksArrayMethods.fields.length - 1}
           multiline
           submitBehavior="submit"
           style={{
@@ -53,7 +52,10 @@ export function InputTask(props: TaskItemProps) {
             textAlignVertical: "top",
             textDecorationLine: selected ? "line-through" : "none",
           }}
-          onSubmitEditing={newLine}
+          onSubmitEditing={async () => {
+            const movedToNextTask = onSubmitTask?.() ?? false;
+            if (!movedToNextTask) await newLine();
+          }}
           onFocus={onFocus}
           onBlur={() => editLine(taskId, value)}
           onKeyPress={async (e) => {

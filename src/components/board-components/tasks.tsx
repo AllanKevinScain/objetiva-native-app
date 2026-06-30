@@ -3,7 +3,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import type { TextInput } from "react-native";
-import { FlatList, Keyboard, KeyboardAvoidingView, Platform } from "react-native";
+import { FlatList, KeyboardAvoidingView, Platform } from "react-native";
 import { CheckAll } from "./components/check-all";
 import { TaskItem } from "./components/task-item";
 
@@ -21,7 +21,9 @@ export function Tasks() {
 
   const tasksListRef = useRef<FlatList<(typeof tasksArrayMethods.fields)[number]>>(null);
   const taskInputRefs = useRef(new Map<string, TextInput>());
-  const focusedTaskRef = useRef<{ index: number; key: string } | null>(null);
+  const initialLastTaskRef = useRef(tasksArrayMethods.fields.at(-1));
+  const hasAppliedInitialFocusRef = useRef(false);
+  const pendingFocusIndexRef = useRef<number | null>(null);
   const [listHeight, setListHeight] = useState(0);
 
   const scrollToTask = useCallback((taskIndex: number, taskKey?: string, focusTask = false) => {
@@ -45,19 +47,43 @@ export function Tasks() {
   }, []);
 
   useEffect(() => {
-    const keyboardEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
-    const subscription = Keyboard.addListener(keyboardEvent, () => {
-      const focusedTask = focusedTaskRef.current;
+    const lastTask = initialLastTaskRef.current;
+    if (!lastTask || hasAppliedInitialFocusRef.current) return;
 
-      if (focusedTask) {
-        setTimeout(() => {
-          scrollToTask(focusedTask.index, focusedTask.key);
-        }, Platform.OS === "ios" ? 50 : 120);
-      }
+    const lastTaskIndex = tasksArrayMethods.fields.length - 1;
+    let focusTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    const animationFrame = requestAnimationFrame(() => {
+      if (hasAppliedInitialFocusRef.current) return;
+
+      scrollToTask(lastTaskIndex, lastTask.key);
+      focusTimeout = setTimeout(() => {
+        const lastTaskInput = taskInputRefs.current.get(lastTask.key);
+        if (!lastTaskInput || hasAppliedInitialFocusRef.current) return;
+
+        hasAppliedInitialFocusRef.current = true;
+        lastTaskInput.focus();
+      }, 120);
     });
 
-    return () => subscription.remove();
-  }, [scrollToTask]);
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      if (focusTimeout) clearTimeout(focusTimeout);
+    };
+    // O foco inicial pertence exclusivamente ao ciclo de montagem da tela.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const pendingFocusIndex = pendingFocusIndexRef.current;
+    if (pendingFocusIndex === null) return;
+
+    const createdTask = tasksArrayMethods.fields[pendingFocusIndex];
+    if (!createdTask) return;
+
+    pendingFocusIndexRef.current = null;
+    scrollToTask(pendingFocusIndex, createdTask.key, true);
+  }, [scrollToTask, tasksArrayMethods.fields]);
 
   return (
     <KeyboardAvoidingView
@@ -100,17 +126,23 @@ export function Tasks() {
                 }
               }}
               onFocus={() => {
-                focusedTaskRef.current = { index: taskIndex, key: item.key };
                 scrollToTask(taskIndex, item.key);
               }}
               onRemove={() => {
                 if (previousTask) {
-                  focusedTaskRef.current = {
-                    index: taskIndex - 1,
-                    key: previousTask.key,
-                  };
                   scrollToTask(taskIndex - 1, previousTask.key, true);
                 }
+              }}
+              onSubmitTask={() => {
+                const nextTask = tasksArrayMethods.fields[taskIndex + 1];
+
+                if (nextTask) {
+                  scrollToTask(taskIndex + 1, nextTask.key, true);
+                  return true;
+                }
+
+                pendingFocusIndexRef.current = taskIndex + 1;
+                return false;
               }}
             />
           );

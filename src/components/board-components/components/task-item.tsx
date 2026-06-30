@@ -15,11 +15,12 @@ export interface TaskItemProps {
   tasksArrayMethods: UseFieldArrayReturn<PanelsSchemaInfertype, `panels.${number}.tasks`, "key">;
   onFocus?: () => void;
   onRemove?: () => void;
+  onSubmitTask?: () => boolean;
   inputRef?: Ref<TextInput>;
 }
 
 export function TaskItem(props: TaskItemProps) {
-  const { taskId, taskIndex, panelIndex, tasksArrayMethods, onFocus, onRemove, inputRef } = props;
+  const { taskId, taskIndex, panelIndex, tasksArrayMethods, onFocus, onRemove, onSubmitTask, inputRef } = props;
 
   return (
     <View style={style.container}>
@@ -32,6 +33,7 @@ export function TaskItem(props: TaskItemProps) {
         tasksArrayMethods={tasksArrayMethods}
         onFocus={onFocus}
         onRemove={onRemove}
+        onSubmitTask={onSubmitTask}
         inputRef={inputRef}
       />
     </View>

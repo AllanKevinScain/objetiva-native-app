@@ -1,7 +1,7 @@
 {
   "name": "objetiva",
   "main": "expo-router/entry",
-  "version": "11",
+  "version": "2.6",
   "type": "module",
   "private": true,
   "scripts": {
